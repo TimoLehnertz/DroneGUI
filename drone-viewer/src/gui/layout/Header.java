@@ -1,5 +1,6 @@
 package gui.layout;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,8 @@ public class Header extends JPanel {
 		 */
 		title.setFont(Cons.FONT_H1);
 		add(title);
+		
+		setBackground(Color.LIGHT_GRAY);
 		
 		/**
 		 * select
