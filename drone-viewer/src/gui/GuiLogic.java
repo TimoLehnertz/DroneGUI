@@ -13,19 +13,14 @@ import javax.swing.JComponent;
 
 import gui.layout.PropertiesPanel;
 import imu.IMU;
-import serial.AccelerometerListener;
-import serial.GyroListener;
-import serial.INSListener;
-import serial.MagnetometerListener;
 import serial.PortInfo;
 import serial.Serial;
 import serial.SerialInterface;
 
-public class GuiLogic implements GyroListener, AccelerometerListener, MagnetometerListener, INSListener {
+public class GuiLogic {
 
 	private static GuiLogic instance = new GuiLogic();
 	
-	List<INSListener> insListeners = new ArrayList<>();
 	List<PropertiesPanel> propertiePanels = new ArrayList<>();
 	
 	private IMU imu = new IMU();
@@ -33,10 +28,6 @@ public class GuiLogic implements GyroListener, AccelerometerListener, Magnetomet
 	
 	private GuiLogic() {
 		super();
-		serial.addGyroListener(this);
-		serial.addAccelerometerListener(this);
-		serial.addMagnetometerListener(this);
-		serial.addINSListener(this);
 	}
 
 	public static GuiLogic getInstance() {
@@ -77,32 +68,6 @@ public class GuiLogic implements GyroListener, AccelerometerListener, Magnetomet
 
 	public IMU getImu() {
 		return imu;
-	}
-	
-	@Override
-	public void gyroDataReceived(double x, double y, double z) {
-		imu.updateGyro(x, y, z);
-	}
-
-	@Override
-	public void magnetometerDataReceived(double x, double y, double z) {
-		imu.updateMagnetometer(x, y, z);
-	}
-
-	@Override
-	public void accelerometerDataReceived(double x, double y, double z) {
-		imu.updateAccelerometer(x, y, z);
-	}
-
-	@Override
-	public void insDataReceived(double w, double x, double y, double z) {
-		for (INSListener insListener : insListeners) {
-			insListener.insDataReceived(w, x, y, z);
-		}
-	}
-	
-	public boolean addINSListener(INSListener listener) {
-		return insListeners.add(listener);
 	}
 	
 	public boolean registerPropertiePanel(PropertiesPanel p) {

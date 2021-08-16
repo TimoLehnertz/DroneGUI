@@ -10,9 +10,12 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import gui.GuiLogic;
 import gui.centerPanels.InsPanel;
+import gui.centerPanels.RadioPanel;
+import gui.centerPanels.SensorPanel;
 
 public class Explorer extends JPanel {
 	
@@ -31,8 +34,17 @@ public class Explorer extends JPanel {
 		add(body, BorderLayout.CENTER);
 		body.setLayout(new GridLayout(30, 1));
 		
+		SensorPanel sensorPanel = new SensorPanel();
+		
+		entries.put(new JButton("Sensors"), sensorPanel);
 		entries.put(new JButton("INS"), new InsPanel());
-		entries.put(new JButton("Moin"), new JLabel("Moin"));
+		entries.put(new JButton("Radio"), new RadioPanel());
+		
+		Timer t = new Timer(100, e -> {
+			logic.loadCenter(sensorPanel);
+			((Timer) e.getSource()).stop();
+		});
+		t.start();
 		
 		initEntries();
 	}

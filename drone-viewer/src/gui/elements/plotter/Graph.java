@@ -23,9 +23,12 @@ public class Graph {
 	
 	private static final Map<String, List<Color>> colors = new HashMap<>();
 	static {
-		colors.put("X", Arrays.asList(Color.red, Color.MAGENTA, Color.ORANGE, Color.orange));
-		colors.put("Y", Arrays.asList(Color.green, new Color(100,255, 150), new Color(200,255, 50)));
-		colors.put("Z", Arrays.asList(Color.blue, Color.cyan, new Color(200, 50, 255)));
+//		colors.put("X", Arrays.asList(Color.red, Color.MAGENTA, Color.ORANGE, Color.orange));
+//		colors.put("Y", Arrays.asList(Color.green, new Color(100,255, 150), new Color(200,255, 50)));
+//		colors.put("Z", Arrays.asList(Color.blue, Color.cyan, new Color(200, 50, 255)));
+		colors.put("X", Arrays.asList(Color.red));
+		colors.put("Y", Arrays.asList(Color.green));
+		colors.put("Z", Arrays.asList(Color.blue));
 	}
 	
 	public Graph(String label) {
@@ -134,10 +137,6 @@ public class Graph {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-//	public Map<Double, Double> getGraph() {
-//		return graph;
-//	}
 	
 	public Color getColor() {
 		return color;

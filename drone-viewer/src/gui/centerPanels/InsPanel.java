@@ -1,38 +1,58 @@
 package gui.centerPanels;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import gui.GuiLogic;
+import gui.elements.FCNumberSetter;
+import gui.elements.SectionPanel;
 import serial.FCCommand;
 import serial.SerialInterface;
 
-public class InsPanel extends JPanel {
+public class InsPanel extends CenterPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private JButton test = new JButton("test");
-	private JButton calibAccBtn = new JButton("Calibrate Accelerometer");
-	private JButton calibGyroBtn = new JButton("Calibrate Gyroscope");
+	private JButton resetBtn = new JButton("Reset");
+	SerialInterface serial = GuiLogic.getInstance().getSerialInterface();
 	
-	GuiLogic logic = GuiLogic.getInstance();
-	
-	SerialInterface serial = logic.getSerialInterface();
+	SectionPanel filterPanel = new SectionPanel("Filtering");
+	SectionPanel sensorFusion = new SectionPanel("Sensor fusion");
+	SectionPanel debugPanel = new SectionPanel("Debug");
 	
 	public InsPanel() {
-		super();
+		super("Inertial NavigationSystem");
 		
-		add(test);
-		add(calibAccBtn);
-		add(calibGyroBtn);
-		calibAccBtn.addActionListener(e -> {
-			serial.sendDo(FCCommand.FC_DO_ACC_CALIB);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		getBody().setLayout(new GridBagLayout());
+		
+		FCNumberSetter accLpf = new FCNumberSetter(FCCommand.FC_GET_ACC_LPF, FCCommand.FC_SET_ACC_LPF, "Accel. Lopass filter:", FCNumberSetter.TYPE_FLOAT);
+		FCNumberSetter gyroLpf = new FCNumberSetter(FCCommand.FC_GET_GYRO_LPF, FCCommand.FC_SET_GYRO_LPF, "Gyro. Lopass filter:", FCNumberSetter.TYPE_FLOAT);
+		
+		filterPanel.add(accLpf);
+		filterPanel.add(gyroLpf);
+		
+		FCNumberSetter accInf = new FCNumberSetter(FCCommand.FC_GET_INS_ACC_INFL, FCCommand.FC_SET_INS_ACC_INFL, "Acc. influence:", FCNumberSetter.TYPE_FLOAT);
+		
+		sensorFusion.add(accInf);
+		
+		add(resetBtn);
+		resetBtn.addActionListener(e -> {
+			serial.sendDo(FCCommand.FC_DO_RESET_INS);
 		});
-		calibGyroBtn.addActionListener(e -> {
-			serial.sendDo(FCCommand.FC_DO_GYRO_CALIB);
-		});
-		test.addActionListener(e -> {
-			serial.post(FCCommand.FC_POST_TEST1, "123");
-		});
+		
+		debugPanel.add(resetBtn);
+		
+		getBody().add(filterPanel, gbc);
+		gbc.gridy = 1;
+		getBody().add(sensorFusion, gbc);
+		gbc.gridy = 2;
+		getBody().add(debugPanel, gbc);
 	}
 }

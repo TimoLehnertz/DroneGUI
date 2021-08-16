@@ -87,7 +87,6 @@ public class GraphRenderer extends JPanel {
 		/**
 		 * draw graphs
 		 */
-		g.setColor(COLOR_LINE);
 		for (Graph graph : graphs) {
 			if(!graph.isVisible()) continue;
 			Point last = new Point(0, height);
@@ -95,13 +94,21 @@ public class GraphRenderer extends JPanel {
 			for (int j = 0; j < graph.getTimes().size() && j < graph.getVals().size(); j++) {
 				Double time = graph.getTimes().get(j);
 				double val = graph.getVals().get(j);
-				if(time < minTime) {
+				if(time < minTime - (maxTime - minTime)) {
 					continue;
 				}
 				Point p = getPoint(time, val);
 				g.drawLine(last.x, last.y, p.x, p.y);
 				last = p;
 			}
+			/**
+			 * Last value
+			 */
+			g.setColor(Color.white);
+			double lastVal = graph.getVals().get(graph.getVals().size() - 1);
+			Point p = getPoint(0, lastVal);
+			p.x = getWidth() - 30;
+			g.drawString(lastVal + "", p.x, p.y);
 		}
 		/**
 		 * mouse

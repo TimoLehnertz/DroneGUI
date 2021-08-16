@@ -28,6 +28,8 @@ public class Header extends JPanel {
 	private JComboBox<String> selectCombo = new JComboBox<>();
 	private JButton refreshButton = new ImageButton("refresh.png", 30, 30);
 	private JButton disconnectButton = new JButton("Disconnect");
+	private JButton startButton = new JButton("Start Telemetry");
+	private JButton stopButton = new JButton("Stop Telemetry");
 	private Map<String, String> comboMap = new HashMap<>();
 	
 	public Header() {
@@ -50,6 +52,9 @@ public class Header extends JPanel {
 		
 		selectCombo.addActionListener(e -> serialChanged());
 		
+		startButton.addActionListener(e -> logic.getSerialInterface().startTelem());
+		stopButton.addActionListener(e -> logic.getSerialInterface().stopTelem());
+		
 		selectPanel.add(selectLabel);
 		selectPanel.add(selectCombo);
 		selectPanel.add(refreshButton);
@@ -57,6 +62,8 @@ public class Header extends JPanel {
 		selectCombo.setSelectedIndex(-1);
 		
 		add(selectPanel);
+		add(startButton);
+		add(stopButton);
 //		selectCom("Nano 33 BLE");
 		new Timer(300, e -> {selectCom("Nano 33 BLE"); ((Timer) e.getSource()).stop();}).start();
 	}

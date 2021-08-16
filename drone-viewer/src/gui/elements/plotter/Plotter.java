@@ -40,7 +40,8 @@ public class Plotter extends JPanel implements ActionListener {
 		setBackground(Color.gray);
 		legend.setOpaque(false);
 		renderer.setOpaque(false);
-		openLegend();
+//		openLegend();
+		closeLegend();
 		header.add(name);
 		add(header, BorderLayout.NORTH);
 		add(legend, BorderLayout.WEST);
@@ -116,6 +117,10 @@ public class Plotter extends JPanel implements ActionListener {
 			}
 		}
 		return null;
+	}
+	
+	public String getName() {
+		return name.getText();
 	}
 	
 	public void setName(String name) {
