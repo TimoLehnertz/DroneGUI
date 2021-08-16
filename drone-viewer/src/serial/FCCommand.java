@@ -60,4 +60,5 @@ public enum FCCommand {
     FC_SET_ACC_LPF,
 	FC_SET_GYRO_LPF,
 	FC_SET_INS_ACC_INFL,
+	
 }
