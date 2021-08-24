@@ -39,6 +39,9 @@ public class SensorPanel extends CenterPanel {
 	FCBooleanSetter quatTelem = new FCBooleanSetter(FCCommand.FC_GET_USE_QUAT_TELEM, FCCommand.FC_SET_QUAT_TELEM, "Quaternion Rot");
 	FCBooleanSetter velTelem = 	new FCBooleanSetter(FCCommand.FC_GET_USE_VEL_TELEM, FCCommand.FC_SET_VEL_TELEM, "Velocity");
 	FCBooleanSetter locTelem = 	new FCBooleanSetter(FCCommand.FC_GET_USE_LOC_TELEM, FCCommand.FC_SET_LOC_TELEM, "Location");
+	FCBooleanSetter timingTelem=new FCBooleanSetter(FCCommand.FC_GET_USE_TIMING, FCCommand.FC_SET_USE_TIMING, "Timing");
+	FCBooleanSetter rcTelem	   =new FCBooleanSetter(FCCommand.FC_GET_USE_RC_TELEM, FCCommand.FC_SET_USE_RC_TELEM, "RC chanels");
+	FCBooleanSetter fcTelem	   =new FCBooleanSetter(FCCommand.FC_GET_USE_FC_TELEM, FCCommand.FC_SET_USE_FC_TELEM, "FC");
 	
 	JButton calibrateAccBtn = new JButton("Calibrate");
 	JButton calibrateGyroBtn = new JButton("Calibrate");
@@ -157,6 +160,13 @@ public class SensorPanel extends CenterPanel {
 		telemSection.getBody().add(velTelem);
 		gbc.gridy = 2;
 		telemSection.getBody().add(locTelem);
+		gbc.gridx = 3;
+		gbc.gridy = 0;
+		telemSection.getBody().add(timingTelem);
+		gbc.gridy = 1;
+		telemSection.getBody().add(rcTelem);
+		gbc.gridy = 2;
+		telemSection.getBody().add(fcTelem);
 		
 		setEnabled(false);
 	}
