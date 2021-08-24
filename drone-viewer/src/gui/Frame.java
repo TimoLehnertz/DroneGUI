@@ -14,7 +14,7 @@ public class Frame extends JFrame {
 	public Frame() {
 		super("Drone viewer");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setBounds(0, 0, 900, 800);
+		setBounds(0, 0, 1300, 800);
 		setLocationRelativeTo(null);
 		ImageIcon img = new ImageIcon("img/drone-logo.png");
 		setIconImage(img.getImage());

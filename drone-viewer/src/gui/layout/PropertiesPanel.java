@@ -1,7 +1,12 @@
 package gui.layout;
 
+import java.awt.Dimension;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import gui.GuiLogic;
 
@@ -16,6 +21,27 @@ public class PropertiesPanel extends JPanel {
 	public PropertiesPanel() {
 		super();
 		logic.registerPropertiePanel(this);
+		
+//		Timer t = new Timer(100, e -> {System.out.println(1);if(active != null) active.setPreferredSize(new Dimension(getWidth(), getHeight()));});
+//		t.start();
+		
+		addComponentListener(new ComponentListener() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+			}
+			@Override
+			public void componentResized(ComponentEvent e) {
+				revalidate();
+				if(active != null) active.setPreferredSize(new Dimension(getWidth(), getHeight()));
+			}
+			@Override
+			public void componentMoved(ComponentEvent e) {
+			}
+			
+			@Override
+			public void componentHidden(ComponentEvent e) {
+			}
+		});
 	}
 
 	public void load(JComponent properties) {
@@ -26,6 +52,8 @@ public class PropertiesPanel extends JPanel {
 		active = properties;
 		add(active);
 		revalidate();
+		active.revalidate();
+		if(active != null) active.setPreferredSize(new Dimension(getWidth(), getHeight()));
 		repaint();
 	}
 }

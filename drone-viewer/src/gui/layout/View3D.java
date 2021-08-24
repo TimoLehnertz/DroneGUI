@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import gui.GuiLogic;
 import imu.IMU;
 import maths.Quaternion;
+import maths.Vec3;
 import objects.MyObject;
 import renderer.Canvas3D;
 import serial.SensorListener;
@@ -18,6 +19,7 @@ public class View3D extends JPanel implements SensorListener{
 	GuiLogic logic = GuiLogic.getInstance();
 	IMU imu = logic.getImu();
 	Quaternion rot = new Quaternion();
+	Vec3 loc = new Vec3();
 	
 	public View3D() {
 		super();
@@ -29,6 +31,7 @@ public class View3D extends JPanel implements SensorListener{
 		
 		MyObject drone = canvas.getScenes().get(0).getObjects().get(1);
 		drone.setRot(rot);
+		drone.setLoc(loc);
 		drone.setScale(0.1);
 	}
 
@@ -48,5 +51,16 @@ public class View3D extends JPanel implements SensorListener{
 				rot.setZ(value);
 			}
 		}
+//		if(sensorName.contentEquals("LOC")) {
+//			if(sensorSubType.contentEquals("X")) {
+//				loc.setX(value);
+//			}
+//			if(sensorSubType.contentEquals("Y")) {
+//				loc.setY(value);
+//			}
+//			if(sensorSubType.contentEquals("Z")) {
+//				loc.setZ(value);
+//			}
+//		}
 	}
 }

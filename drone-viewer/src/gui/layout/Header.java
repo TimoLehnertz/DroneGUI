@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,6 +14,7 @@ import javax.swing.Timer;
 import gui.Cons;
 import gui.GuiLogic;
 import gui.elements.ImageButton;
+import serial.FCCommand;
 import serial.PortInfo;
 
 public class Header extends JPanel {
@@ -28,8 +30,10 @@ public class Header extends JPanel {
 	private JComboBox<String> selectCombo = new JComboBox<>();
 	private JButton refreshButton = new ImageButton("refresh.png", 30, 30);
 	private JButton disconnectButton = new JButton("Disconnect");
-	private JButton startButton = new JButton("Start Telemetry");
-	private JButton stopButton = new JButton("Stop Telemetry");
+	private JButton startButton = new JButton("Start Atti Telem");
+	private JButton stopButton = new JButton("Stop Atti Telemetry");
+	private JButton saveButton = new JButton("Write to EEPROM");
+	private JCheckBox liteCheckBox = new JCheckBox("Lite mode");
 	private Map<String, String> comboMap = new HashMap<>();
 	
 	public Header() {
@@ -54,6 +58,7 @@ public class Header extends JPanel {
 		
 		startButton.addActionListener(e -> logic.getSerialInterface().startTelem());
 		stopButton.addActionListener(e -> logic.getSerialInterface().stopTelem());
+		saveButton.addActionListener(e -> logic.getSerialInterface().sendDo(FCCommand.FC_DO_SAVE_EEPROM));
 		
 		selectPanel.add(selectLabel);
 		selectPanel.add(selectCombo);
@@ -64,6 +69,9 @@ public class Header extends JPanel {
 		add(selectPanel);
 		add(startButton);
 		add(stopButton);
+		add(saveButton);
+		add(liteCheckBox);
+		liteCheckBox.addChangeListener(e -> logic.setLiteMode(liteCheckBox.isSelected()));
 //		selectCom("Nano 33 BLE");
 		new Timer(300, e -> {selectCom("Nano 33 BLE"); ((Timer) e.getSource()).stop();}).start();
 	}

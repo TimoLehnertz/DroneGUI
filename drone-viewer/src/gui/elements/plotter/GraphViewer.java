@@ -36,7 +36,7 @@ public class GraphViewer extends JPanel implements SensorListener {
 		setLayout(new BorderLayout());
 		add(header, BorderLayout.NORTH);
 		add(plotterPanel, BorderLayout.CENTER);
-		plotterPanel.setBackground(Color.black);
+		plotterPanel.setBackground(Color.DARK_GRAY);
 		plotterPanel.setLayout(new GridLayout(3, 1, 0, 2));
 		
 		initHeader();

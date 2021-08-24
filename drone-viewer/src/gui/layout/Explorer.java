@@ -14,6 +14,8 @@ import javax.swing.Timer;
 
 import gui.GuiLogic;
 import gui.centerPanels.InsPanel;
+import gui.centerPanels.MotorPanel;
+import gui.centerPanels.PIDPanel;
 import gui.centerPanels.RadioPanel;
 import gui.centerPanels.SensorPanel;
 
@@ -39,6 +41,8 @@ public class Explorer extends JPanel {
 		entries.put(new JButton("Sensors"), sensorPanel);
 		entries.put(new JButton("INS"), new InsPanel());
 		entries.put(new JButton("Radio"), new RadioPanel());
+		entries.put(new JButton("Motors"), new MotorPanel());
+		entries.put(new JButton("PIDs"), new PIDPanel());
 		
 		Timer t = new Timer(100, e -> {
 			logic.loadCenter(sensorPanel);

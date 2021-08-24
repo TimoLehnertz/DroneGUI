@@ -4,7 +4,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
 import gui.GuiLogic;
 import gui.elements.FCNumberSetter;
@@ -32,13 +31,13 @@ public class InsPanel extends CenterPanel {
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		getBody().setLayout(new GridBagLayout());
 		
-		FCNumberSetter accLpf = new FCNumberSetter(FCCommand.FC_GET_ACC_LPF, FCCommand.FC_SET_ACC_LPF, "Accel. Lopass filter:", FCNumberSetter.TYPE_FLOAT);
-		FCNumberSetter gyroLpf = new FCNumberSetter(FCCommand.FC_GET_GYRO_LPF, FCCommand.FC_SET_GYRO_LPF, "Gyro. Lopass filter:", FCNumberSetter.TYPE_FLOAT);
+		FCNumberSetter accLpf = new FCNumberSetter(FCCommand.FC_GET_ACC_LPF, FCCommand.FC_SET_ACC_LPF, "Accel. Lopass filter:");
+		FCNumberSetter gyroLpf = new FCNumberSetter(FCCommand.FC_GET_GYRO_LPF, FCCommand.FC_SET_GYRO_LPF, "Gyro. Lopass filter:");
 		
 		filterPanel.add(accLpf);
 		filterPanel.add(gyroLpf);
 		
-		FCNumberSetter accInf = new FCNumberSetter(FCCommand.FC_GET_INS_ACC_INFL, FCCommand.FC_SET_INS_ACC_INFL, "Acc. influence:", FCNumberSetter.TYPE_FLOAT);
+		FCNumberSetter accInf = new FCNumberSetter(FCCommand.FC_GET_INS_ACC_INF, FCCommand.FC_SET_INS_ACC_INF, "Acc. influence:");
 		
 		sensorFusion.add(accInf);
 		

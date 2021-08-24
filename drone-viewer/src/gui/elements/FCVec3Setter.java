@@ -15,14 +15,18 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.Timer;
 
+import maths.Vec3;
 import serial.FCCommand;
 
-public class FCNumberSetter extends FCSetter<Double> {
+public class FCVec3Setter extends FCSetter<Vec3> {
 
 	private static final long serialVersionUID = 1L;
 	
 	private double step;
+	
+	private static final String[] VEC3_LABELS = {"x", "y", "z"};
 	
 	private List<JSpinner> spinners = new ArrayList<>();
 	
@@ -33,11 +37,11 @@ public class FCNumberSetter extends FCSetter<Double> {
 	private JPanel rightPanel = new JPanel();
 	private JPanel content = new JPanel();
 	
-	public FCNumberSetter(FCCommand getter, FCCommand setter, String label) {
-		this(getter, setter, label, 0.00001f);
+	public FCVec3Setter(FCCommand getter, FCCommand setter, String label) {
+		this(getter, setter, label, 0.0001f);
 	}
 
-	public FCNumberSetter(FCCommand getter, FCCommand setter, String label, double step) {
+	public FCVec3Setter(FCCommand getter, FCCommand setter, String label, double step) {
 		super(getter, setter);
 		this.label = new JLabel(label);
 		this.step = step;
@@ -63,8 +67,11 @@ public class FCNumberSetter extends FCSetter<Double> {
 		gbc.gridx = 1;
 		add(rightPanel, gbc);
 		
+		content.setLayout(new GridLayout(3, 1));
 		rightPanel.setLayout(new GridLayout(2, 1));
-		addSpinnerPanel(label);
+		for (int i = 0; i < 3; i++) {
+			addSpinnerPanel(VEC3_LABELS[i]);
+		}
 		fcFieldEnable(false);
 	}
 	
@@ -74,7 +81,7 @@ public class FCNumberSetter extends FCSetter<Double> {
 		
 		SpinnerModel model = new SpinnerNumberModel(0, -10000000, 10000000, step);
 		JSpinner spinner = new JSpinner(model);
-		spinner.setEditor(new JSpinner.NumberEditor(spinner, "0.00000"));
+		spinner.setEditor(new JSpinner.NumberEditor(spinner, "0.0000"));
 		Component mySpinnerEditor = spinner.getEditor();
 		JFormattedTextField jftf = ((JSpinner.DefaultEditor) mySpinnerEditor).getTextField();
 		jftf.setColumns(5);
@@ -82,7 +89,7 @@ public class FCNumberSetter extends FCSetter<Double> {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-//		panel.add(new JLabel(label), gbc);
+		panel.add(new JLabel(label), gbc);
 		gbc.gridx = 1;
 		panel.add(spinner, gbc);
 		
@@ -105,27 +112,34 @@ public class FCNumberSetter extends FCSetter<Double> {
 		if(spinners == null) spinners = new ArrayList<>();
 		saveBtn.setEnabled(enabled);
 		resetBtn.setEnabled(enabled);
-		spinners.get(0).setEnabled(enabled);
+		for (JSpinner spinner : spinners) {
+			spinner.setEnabled(enabled);
+		}
 	}
 
 	@Override
-	protected Double parseString(String strVal) {
-		return Double.parseDouble(strVal);
+	protected Vec3 parseString(String strVal) {
+		return new Vec3(strVal);
 	}
 
 	@Override
-	protected String parseValue(Double objVal) {
+	protected String parseValue(Vec3 objVal) {
 		return objVal.toString();
 	}
 
 	@Override
-	protected void setVal(Double val) {
-		if(val == null) val = 0D;
-		spinners.get(0).setValue(val);
+	protected void setVal(Vec3 val) {
+		if(val == null) val = new Vec3();
+		spinners.get(0).setValue(val.x);
+		spinners.get(1).setValue(val.y);
+		spinners.get(2).setValue(val.z);
 	}
 
 	@Override
-	public Double getVal() {
-		return (Double) spinners.get(0).getValue();
+	public Vec3 getVal() {
+		return new Vec3(
+				(double) spinners.get(0).getValue(),
+				(double) spinners.get(1).getValue(),
+				(double) spinners.get(2).getValue());
 	}
 }

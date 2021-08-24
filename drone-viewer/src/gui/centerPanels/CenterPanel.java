@@ -4,11 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.LayoutManager;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import gui.Cons;
 
@@ -28,11 +29,23 @@ public class CenterPanel extends JPanel {
 		nameLabel.setFont(Cons.FONT_H2);
 		top.add(nameLabel);
 		setBackground(Color.black);
+		body.setBackground(Color.DARK_GRAY);
 		
 //		body = new JPanel();
 		
+		/**
+		 * Scroll bar
+		 */
+		
+		JScrollPane scroll = new JScrollPane(body);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		setPreferredSize(new Dimension(500, 700));
+		
+//		body.add(scroll);
+		
 		add(top, BorderLayout.NORTH);
-		add(body, BorderLayout.CENTER);
+		add(scroll, BorderLayout.CENTER);
 	}
 	
 	public JPanel getBody() {

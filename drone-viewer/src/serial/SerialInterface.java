@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.swing.Timer;
 
+import gui.elements.FCSetter;
+
 public class SerialInterface implements SerialReceiveListener {
 
 	private static SerialInterface instance = null;
@@ -23,11 +25,16 @@ public class SerialInterface implements SerialReceiveListener {
 	List<LineListener> lineListeners = new ArrayList<>();
 	List<PrintListener> printListeners = new ArrayList<>();
 	List<SensorListener> sensorListeners = new ArrayList<>();
+	List<FCSetter<?>> fcSetters = new ArrayList<>();
 	
 	/**
 	 * getter comunication
 	 */
 	Map<Long, Receiver> getters = new HashMap<>();
+	
+	public boolean isConnected() {
+		return serial.isConnected();
+	}
 	
 	private SerialInterface() {
 		super();
@@ -47,12 +54,29 @@ public class SerialInterface implements SerialReceiveListener {
 	public void get(FCCommand command, Receiver receiver) {
 		getters.put(uid, receiver);
 		send(command.name() + " " + uid);
+		long uidCpy = uid;
+		Timer t = new Timer((int) (SETTER_TIMEOUT * 1000), e -> {
+			((Timer) e.getSource()).stop();
+			if(getters.containsKey(uidCpy)) {
+				getters.get(uidCpy).receive(false, null);
+				getters.remove(uidCpy);
+			}
+		});
+		t.start();
 		uid++;
+	}
+	
+	public void set(FCCommand setter, Object value) {
+		set(setter, value, null);
 	}
 	
 	public void set(FCCommand setter, Object value, SetListener listener) {
 		String msg = value.toString();
-		SetterHelper s = new SetterHelper(msg, listener, uid);
+		send(setter.name() + " " + uid++ + " " + msg); //send
+		
+		if(listener == null) return;
+		
+		SetterHelper s = new SetterHelper(msg, listener, uid - 1);
 		setters.add(s);
 		Timer t = new Timer((int) SETTER_TIMEOUT * 1000, e -> {
 			if(setters.contains(s)) {
@@ -62,10 +86,7 @@ public class SerialInterface implements SerialReceiveListener {
 			}
 			((Timer) e.getSource()).stop();
 		});
-		//send
-		send(setter.name() + " " + uid + " " + msg);
 		t.start();
-		uid++;
 	}
 	
 	public void post(FCCommand command, String value) {
@@ -100,6 +121,14 @@ public class SerialInterface implements SerialReceiveListener {
 		return sensorListeners.remove(l);
 	}
 	
+	public boolean addFcSetterListener(FCSetter<?> l) {
+		return fcSetters.add(l);
+	}
+	
+	public boolean removeFcSetterListener(FCSetter<?> l) {
+		return fcSetters.remove(l);
+	}
+	
 	private void processResponse(String line) {
 		String split[] = line.split(" ");
 		if(split.length < 3) {
@@ -123,7 +152,7 @@ public class SerialInterface implements SerialReceiveListener {
 		 * Getters
 		 */
 		if(getters.containsKey(id)) {			
-			getters.get(id).receive(response);
+			getters.get(id).receive(true, response);
 			getters.remove(id);
 		}
 	}
@@ -188,11 +217,13 @@ public class SerialInterface implements SerialReceiveListener {
 	}
 	
 	public void startTelem() {
-		send(FCCommand.FC_DO_START_TELEM);
+		set(FCCommand.FC_SET_QUAT_TELEM, true);
+		refreshSetters();
 	}
 	
 	public void stopTelem() {
-		send(FCCommand.FC_DO_STOP_TELEM);
+		set(FCCommand.FC_SET_QUAT_TELEM, false);
+		refreshSetters();
 	}
 	
 	public void calibrateAcc() {
@@ -219,6 +250,9 @@ public class SerialInterface implements SerialReceiveListener {
 	 */
 	public void disconnectSerial() {
 		serial.close();
+		for (FCSetter<?> fcSetter : fcSetters) {
+			fcSetter.fcFieldEnable(false);
+		}
 	}
 	
 	public boolean addOpenListeners(SerialOpenListener l) {
@@ -236,5 +270,15 @@ public class SerialInterface implements SerialReceiveListener {
 		} catch(NumberFormatException e){  
 			return false;  
 		}
+	}
+	
+	public void refreshSetters() {
+		Timer t = new Timer(100, e -> {
+			((Timer) e.getSource()).stop();
+			for (FCSetter<?> fcSetter : fcSetters) {
+				fcSetter.get();
+			}
+		});
+		t.start();
 	}
 }

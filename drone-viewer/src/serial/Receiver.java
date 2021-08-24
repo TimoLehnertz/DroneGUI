@@ -3,5 +3,5 @@ package serial;
 @FunctionalInterface
 public interface Receiver {
 
-	public void receive(String value);
+	public void receive(boolean succsess, String value);
 }

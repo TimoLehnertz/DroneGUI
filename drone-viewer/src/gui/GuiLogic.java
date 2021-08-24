@@ -25,7 +25,8 @@ public class GuiLogic {
 	
 	private IMU imu = new IMU();
 	private SerialInterface serial = SerialInterface.getInstance();
-	
+	private boolean liteMode = false;
+
 	private GuiLogic() {
 		super();
 	}
@@ -86,5 +87,13 @@ public class GuiLogic {
 
 	public SerialInterface getSerialInterface() {
 		return serial;
+	}
+	
+	public boolean isLiteMode() {
+		return liteMode;
+	}
+
+	public void setLiteMode(boolean liteMode) {
+		this.liteMode = liteMode;
 	}
 }
