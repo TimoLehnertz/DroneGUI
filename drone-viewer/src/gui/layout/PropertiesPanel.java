@@ -22,9 +22,6 @@ public class PropertiesPanel extends JPanel {
 		super();
 		logic.registerPropertiePanel(this);
 		
-//		Timer t = new Timer(100, e -> {System.out.println(1);if(active != null) active.setPreferredSize(new Dimension(getWidth(), getHeight()));});
-//		t.start();
-		
 		addComponentListener(new ComponentListener() {
 			@Override
 			public void componentShown(ComponentEvent e) {

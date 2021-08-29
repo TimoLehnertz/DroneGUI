@@ -38,8 +38,10 @@ public class InsPanel extends CenterPanel {
 		filterPanel.add(gyroLpf);
 		
 		FCNumberSetter accInf = new FCNumberSetter(FCCommand.FC_GET_INS_ACC_INF, FCCommand.FC_SET_INS_ACC_INF, "Acc. influence:");
+		FCNumberSetter magInf = new FCNumberSetter(FCCommand.FC_GET_INS_MAG_INF, FCCommand.FC_SET_INS_MAG_INF, "Mag. influence:");
 		
 		sensorFusion.add(accInf);
+		sensorFusion.add(magInf);
 		
 		add(resetBtn);
 		resetBtn.addActionListener(e -> {

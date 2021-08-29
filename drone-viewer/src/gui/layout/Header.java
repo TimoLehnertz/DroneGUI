@@ -33,6 +33,7 @@ public class Header extends JPanel {
 	private JButton startButton = new JButton("Start Atti Telem");
 	private JButton stopButton = new JButton("Stop Atti Telemetry");
 	private JButton saveButton = new JButton("Write to EEPROM");
+	private JButton ereaseButton = new JButton("Erease to EEPROM");
 	private JCheckBox liteCheckBox = new JCheckBox("Lite mode");
 	private Map<String, String> comboMap = new HashMap<>();
 	
@@ -59,6 +60,7 @@ public class Header extends JPanel {
 		startButton.addActionListener(e -> logic.getSerialInterface().startTelem());
 		stopButton.addActionListener(e -> logic.getSerialInterface().stopTelem());
 		saveButton.addActionListener(e -> logic.getSerialInterface().sendDo(FCCommand.FC_DO_SAVE_EEPROM));
+		ereaseButton.addActionListener(e -> logic.getSerialInterface().sendDo(FCCommand.FC_DO_ERASE_EEPROM));
 		
 		selectPanel.add(selectLabel);
 		selectPanel.add(selectCombo);
@@ -70,6 +72,7 @@ public class Header extends JPanel {
 		add(startButton);
 		add(stopButton);
 		add(saveButton);
+		add(ereaseButton);
 		add(liteCheckBox);
 		liteCheckBox.addChangeListener(e -> logic.setLiteMode(liteCheckBox.isSelected()));
 //		selectCom("Nano 33 BLE");

@@ -15,8 +15,8 @@ public class LayoutPanel extends JPanel {
 	 */
 	private Header header = new Header();
 	private Footer footer = new Footer();
-	private Explorer explorer = new Explorer();
 	private PropertiesPanel propertiesPanel = new PropertiesPanel();
+	private Explorer explorer = new Explorer();
 	private Viewer viewer = new Viewer();
 	
 	public LayoutPanel() {

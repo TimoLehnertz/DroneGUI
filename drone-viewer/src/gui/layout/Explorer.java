@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import gui.GuiLogic;
+import gui.centerPanels.ExtrasPanel;
+import gui.centerPanels.FCPanel;
 import gui.centerPanels.InsPanel;
 import gui.centerPanels.MotorPanel;
 import gui.centerPanels.PIDPanel;
@@ -43,9 +45,11 @@ public class Explorer extends JPanel {
 		entries.put(new JButton("Radio"), new RadioPanel());
 		entries.put(new JButton("Motors"), new MotorPanel());
 		entries.put(new JButton("PIDs"), new PIDPanel());
-		
+		entries.put(new JButton("FC"), new FCPanel());
+		entries.put(new JButton("Extras"), new ExtrasPanel());
+		logic.loadCenter(sensorPanel);
 		Timer t = new Timer(100, e -> {
-			logic.loadCenter(sensorPanel);
+			
 			((Timer) e.getSource()).stop();
 		});
 		t.start();

@@ -51,16 +51,16 @@ public class View3D extends JPanel implements SensorListener{
 				rot.setZ(value);
 			}
 		}
-//		if(sensorName.contentEquals("LOC")) {
-//			if(sensorSubType.contentEquals("X")) {
-//				loc.setX(value);
-//			}
-//			if(sensorSubType.contentEquals("Y")) {
-//				loc.setY(value);
-//			}
-//			if(sensorSubType.contentEquals("Z")) {
-//				loc.setZ(value);
-//			}
-//		}
+		if(sensorName.contentEquals("LOC")) {
+			if(sensorSubType.contentEquals("X")) {
+				loc.setX(value);
+			}
+			if(sensorSubType.contentEquals("Y")) {
+				loc.setY(value);
+			}
+			if(sensorSubType.contentEquals("Z")) {
+				loc.setZ(value);
+			}
+		}
 	}
 }

@@ -32,6 +32,9 @@ public class SerialInterface implements SerialReceiveListener {
 	 */
 	Map<Long, Receiver> getters = new HashMap<>();
 	
+	private long lastSend;
+	private int minSendDelay = 1;
+	
 	public boolean isConnected() {
 		return serial.isConnected();
 	}
@@ -72,12 +75,15 @@ public class SerialInterface implements SerialReceiveListener {
 	
 	public void set(FCCommand setter, Object value, SetListener listener) {
 		String msg = value.toString();
+		SetterHelper s = new SetterHelper(msg, listener, uid);
+		setters.add(s);
 		send(setter.name() + " " + uid++ + " " + msg); //send
 		
-		if(listener == null) return;
+		if(listener == null) {
+			setters.remove(s);
+			return;
+		}
 		
-		SetterHelper s = new SetterHelper(msg, listener, uid - 1);
-		setters.add(s);
 		Timer t = new Timer((int) SETTER_TIMEOUT * 1000, e -> {
 			if(setters.contains(s)) {
 				System.out.println("timout");
@@ -217,13 +223,13 @@ public class SerialInterface implements SerialReceiveListener {
 	}
 	
 	public void startTelem() {
-		set(FCCommand.FC_SET_QUAT_TELEM, true);
-		refreshSetters();
+		set(FCCommand.FC_SET_QUAT_TELEM, true, e -> {});
+//		refreshSetters();
 	}
 	
 	public void stopTelem() {
-		set(FCCommand.FC_SET_QUAT_TELEM, false);
-		refreshSetters();
+		set(FCCommand.FC_SET_QUAT_TELEM, false, e -> {});
+//		refreshSetters();
 	}
 	
 	public void calibrateAcc() {
@@ -239,10 +245,19 @@ public class SerialInterface implements SerialReceiveListener {
 	}
 	
 	private void send(String line) {
+		if(System.currentTimeMillis() - lastSend < minSendDelay) {
+			Timer t = new Timer((int) (minSendDelay - (System.currentTimeMillis() - lastSend)), e -> {
+				((Timer) e.getSource()).stop();
+				send(line);
+			});
+			t.start();
+			return;
+		}
 		serial.println(line);
 		for (PrintListener listener : printListeners) {
 			listener.linePrinted(line);
 		}
+		lastSend = System.currentTimeMillis();
 	}
 	
 	/**
@@ -280,5 +295,13 @@ public class SerialInterface implements SerialReceiveListener {
 			}
 		});
 		t.start();
+	}
+
+	public int getMinSendDelay() {
+		return minSendDelay;
+	}
+
+	public void setMinSendDelay(int minSendDelay) {
+		this.minSendDelay = minSendDelay;
 	}
 }

@@ -11,8 +11,10 @@ import javax.swing.Timer;
 
 import gui.GuiLogic;
 import gui.elements.FCBooleanSetter;
+import gui.elements.FCMat3Setter;
 import gui.elements.FCVec3Setter;
 import gui.elements.SectionPanel;
+import popups.MagCalibFrame;
 import serial.FCCommand;
 import serial.SerialInterface;
 
@@ -20,7 +22,9 @@ public class SensorPanel extends CenterPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	SerialInterface serial = GuiLogic.getInstance().getSerialInterface();
+	GuiLogic logic = GuiLogic.getInstance();
+	
+	SerialInterface serial = logic.getSerialInterface();
 
 	SectionPanel gyro = new SectionPanel("Gyroscope");
 	SectionPanel acc = new SectionPanel("Accelerometer");
@@ -51,8 +55,8 @@ public class SensorPanel extends CenterPanel {
 	FCVec3Setter accMul;
 	FCVec3Setter gyroOffset;
 	FCVec3Setter gyroMul;
-	FCVec3Setter magOffset;
-	FCVec3Setter magMul;
+	FCVec3Setter magHardIron;
+	FCMat3Setter magSoftIron;
 	
 	public SensorPanel() {
 		super("Sensors");
@@ -93,12 +97,12 @@ public class SensorPanel extends CenterPanel {
 		calibrateGyroBtn.addActionListener((e) -> {serial.sendDo(FCCommand.FC_DO_GYRO_CALIB); refreshGyroOffset();});
 		calibGyroPanel.add(new JLabel("<html>The drone has to experience<br>no vibrations or<br>changes in rotation one<br>second before calibration</html>"));
 		
-		magOffset = new FCVec3Setter(FCCommand.FC_GET_MAG_OFFSET, FCCommand.FC_SET_MAG_OFFSET, "Offset");
-		magMul = new FCVec3Setter(FCCommand.FC_GET_MAG_MUL, FCCommand.FC_SET_MAG_MUL, "Multiplicator");
+		magHardIron = new FCVec3Setter(FCCommand.FC_GET_MAG_HARD_IRON, FCCommand.FC_SET_MAG_HARD_IRON, "Hard iron offset");
+		magSoftIron = new FCMat3Setter(FCCommand.FC_GET_MAG_SOFT_IRON, FCCommand.FC_SET_MAG_SOFT_IRON, "Soft Iron scale factor");
 		JPanel calibMagPanel = new JPanel();
 		calibMagPanel.add(calibrateMagBtn);
-		calibrateMagBtn.addActionListener((e) -> {serial.sendDo(FCCommand.FC_DO_MAG_CALIB); refreshMagOffset(); });
-		calibMagPanel.add(new JLabel("<html>Moin</html>"));
+		calibrateMagBtn.addActionListener((e) -> logic.popup(new MagCalibFrame(), true));
+		calibMagPanel.add(new JLabel("<html>Open magnetometer calibration</html>"));
 		
 		gbc.gridy = 0;
 		gbc.gridx = 0;
@@ -129,9 +133,9 @@ public class SensorPanel extends CenterPanel {
 		
 		gbc.gridy = 0;
 		gbc.gridx = 0;
-		mag.getBody().add(magOffset, gbc);
+		mag.getBody().add(magHardIron, gbc);
 		gbc.gridx = 1;
-		mag.getBody().add(magMul, gbc);
+		mag.getBody().add(magSoftIron, gbc);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.gridwidth = 2;
@@ -182,14 +186,6 @@ public class SensorPanel extends CenterPanel {
 	private void refreshGyroOffset() {
 		Timer t = new Timer(100, e -> {
 			gyroOffset.refresh();
-			((Timer) e.getSource()).stop();
-		});
-		t.start();
-	}
-	
-	private void refreshMagOffset() {
-		Timer t = new Timer(100, e -> {
-			magOffset.refresh();
 			((Timer) e.getSource()).stop();
 		});
 		t.start();

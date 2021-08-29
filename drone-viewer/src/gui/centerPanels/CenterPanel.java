@@ -17,7 +17,7 @@ public class CenterPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 
-	private JPanel body = new JPanel();
+	protected JPanel body = new JPanel();
 	
 	public CenterPanel(String name) {
 		super();
@@ -41,6 +41,8 @@ public class CenterPanel extends JPanel {
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		setPreferredSize(new Dimension(500, 700));
+		scroll.getVerticalScrollBar().setUnitIncrement(16);
+
 		
 //		body.add(scroll);
 		

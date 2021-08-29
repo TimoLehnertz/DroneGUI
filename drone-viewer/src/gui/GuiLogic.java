@@ -1,15 +1,20 @@
 package gui;
 
 import java.awt.Image;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.IntConsumer;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.Timer;
 
 import gui.layout.PropertiesPanel;
 import imu.IMU;
@@ -23,6 +28,7 @@ public class GuiLogic {
 	
 	List<PropertiesPanel> propertiePanels = new ArrayList<>();
 	
+	private Frame frame;
 	private IMU imu = new IMU();
 	private SerialInterface serial = SerialInterface.getInstance();
 	private boolean liteMode = false;
@@ -66,6 +72,50 @@ public class GuiLogic {
 		ImageIcon icon = new ImageIcon(dimg);;
 	    return icon;
 	}
+	
+	public void popup(JFrame popup, boolean locking) {
+		popup(popup, locking, null);
+	}
+	
+	public void popup(JFrame popup, boolean locking, IntConsumer onclose) {
+		popup.setVisible(true);
+		popup.setLocationRelativeTo(frame);
+		popup.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		if(locking) {			
+			frame.setEnabled(false);
+			popup.addWindowListener(new WindowListener() {
+				@Override
+				public void windowOpened(WindowEvent e) {
+				}
+				
+				@Override
+				public void windowIconified(WindowEvent e) {
+				}
+				
+				@Override
+				public void windowDeiconified(WindowEvent e) {
+				}
+				
+				@Override
+				public void windowDeactivated(WindowEvent e) {
+				}
+				
+				@Override
+				public void windowClosing(WindowEvent e) {
+					frame.setEnabled(true);
+				}
+				
+				@Override
+				public void windowClosed(WindowEvent e) {
+					if(onclose != null) onclose.accept(1);
+				}
+				
+				@Override
+				public void windowActivated(WindowEvent e) {
+				}
+			});
+		}
+	}
 
 	public IMU getImu() {
 		return imu;
@@ -95,5 +145,9 @@ public class GuiLogic {
 
 	public void setLiteMode(boolean liteMode) {
 		this.liteMode = liteMode;
+	}
+
+	public void setFrame(Frame frame) {
+		this.frame = frame;
 	}
 }
