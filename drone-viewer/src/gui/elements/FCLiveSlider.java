@@ -1,6 +1,5 @@
 package gui.elements;
 
-import java.awt.Color;
 import java.awt.GridLayout;
 
 import javax.swing.JLabel;
@@ -31,8 +30,6 @@ public class FCLiveSlider extends FCSetter<Double> {
 		add(new JLabel(label));
 		add(slider);
 		add(valueLabel);
-		
-//		slider.setBackground(Color.gray);
 		
 		disableOnSave = false;
 		

@@ -23,7 +23,7 @@ public class Header extends JPanel {
 
 	GuiLogic logic = GuiLogic.getInstance();
 	
-	private JLabel title = new JLabel("Drone viewer");
+//	private JLabel title = new JLabel("Drone viewer");
 	
 	private JPanel selectPanel = new JPanel();
 	private JLabel selectLabel = new JLabel("Select drone:");
@@ -34,6 +34,7 @@ public class Header extends JPanel {
 	private JButton stopButton = new JButton("Stop Atti Telemetry");
 	private JButton saveButton = new JButton("Write to EEPROM");
 	private JButton ereaseButton = new JButton("Erease to EEPROM");
+	private JButton rebootButton = new JButton("Reboot");
 	private JCheckBox liteCheckBox = new JCheckBox("Lite mode");
 	private Map<String, String> comboMap = new HashMap<>();
 	
@@ -42,8 +43,8 @@ public class Header extends JPanel {
 		/**
 		 * title
 		 */
-		title.setFont(Cons.FONT_H1);
-		add(title);
+//		title.setFont(Cons.FONT_H1);
+//		add(title);
 		
 		setBackground(Color.LIGHT_GRAY);
 		
@@ -61,6 +62,7 @@ public class Header extends JPanel {
 		stopButton.addActionListener(e -> logic.getSerialInterface().stopTelem());
 		saveButton.addActionListener(e -> logic.getSerialInterface().sendDo(FCCommand.FC_DO_SAVE_EEPROM));
 		ereaseButton.addActionListener(e -> logic.getSerialInterface().sendDo(FCCommand.FC_DO_ERASE_EEPROM));
+		rebootButton.addActionListener(e -> logic.getSerialInterface().sendDo(FCCommand.FC_DO_REBOOT));
 		
 		selectPanel.add(selectLabel);
 		selectPanel.add(selectCombo);
@@ -73,26 +75,16 @@ public class Header extends JPanel {
 		add(stopButton);
 		add(saveButton);
 		add(ereaseButton);
+		add(rebootButton);
 		add(liteCheckBox);
 		liteCheckBox.addChangeListener(e -> logic.setLiteMode(liteCheckBox.isSelected()));
 //		selectCom("Nano 33 BLE");
-		new Timer(300, e -> {selectCom("Nano 33 BLE"); ((Timer) e.getSource()).stop();}).start();
+//		new Timer(300, e -> {selectCom("Nano 33 BLE"); ((Timer) e.getSource()).stop();}).start();
 	}
 	
 	private void disconnect() {
 		logic.disconnectSerial();
 		selectCombo.setSelectedIndex(-1);
-	}
-	
-	private void selectCom(String name) {
-		for (int i = 0; i < selectCombo.getItemCount(); i++) {
-			String item = selectCombo.getItemAt(i);
-			if(item.contains(name)) {
-				selectCombo.setSelectedIndex(i);
-				logic.selectComPort(name);
-				break;
-			}
-		}
 	}
 
 	private void serialChanged() {

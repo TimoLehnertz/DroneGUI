@@ -1,7 +1,6 @@
 package gui.elements;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -9,20 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 
 import serial.FCCommand;
 
 public class FCNumberSetter extends FCSetter<Double> {
 
 	private static final long serialVersionUID = 1L;
-	
-	private double step;
 	
 	private List<JSpinner> spinners = new ArrayList<>();
 	
@@ -32,15 +26,10 @@ public class FCNumberSetter extends FCSetter<Double> {
 	
 	private JPanel rightPanel = new JPanel();
 	private JPanel content = new JPanel();
-	
-	public FCNumberSetter(FCCommand getter, FCCommand setter, String label) {
-		this(getter, setter, label, 0.00001f);
-	}
 
-	public FCNumberSetter(FCCommand getter, FCCommand setter, String label, double step) {
+	public FCNumberSetter(FCCommand getter, FCCommand setter, String label) {
 		super(getter, setter);
 		this.label = new JLabel(label);
-		this.step = step;
 		
 		saveBtn.addActionListener(e -> save());
 		resetBtn.addActionListener(e -> reset());
@@ -71,13 +60,8 @@ public class FCNumberSetter extends FCSetter<Double> {
 	private void addSpinnerPanel(String label) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
-		
-		SpinnerModel model = new SpinnerNumberModel(0, -10000000, 10000000, step);
-		JSpinner spinner = new JSpinner(model);
-		spinner.setEditor(new JSpinner.NumberEditor(spinner, "0.00000"));
-		Component mySpinnerEditor = spinner.getEditor();
-		JFormattedTextField jftf = ((JSpinner.DefaultEditor) mySpinnerEditor).getTextField();
-		jftf.setColumns(5);
+
+		JSpinner spinner = getSpinner();
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;

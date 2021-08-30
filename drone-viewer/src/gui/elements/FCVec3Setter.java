@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.Timer;
 
 import maths.Vec3;
 import serial.FCCommand;

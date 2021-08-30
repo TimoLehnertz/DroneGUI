@@ -3,7 +3,11 @@ package gui.elements;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
+import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.Timer;
 
 import gui.GuiLogic;
@@ -22,8 +26,6 @@ public abstract class FCSetter<T> extends JPanel {
 	public BooleanSupplier saveConsition = null;
 	
 	private SerialInterface serial = GuiLogic.getInstance().getSerialInterface();
-	
-	private T lastVal = null;
 	
 	public FCSetter(FCCommand getter, FCCommand setter) {
 		super();
@@ -82,7 +84,6 @@ public abstract class FCSetter<T> extends JPanel {
 			}
 			setVal(parseString(res));
 			setEnabledTrueDelay(100);
-			lastVal = parseString(res);
 		});
 	}
 	
@@ -125,6 +126,19 @@ public abstract class FCSetter<T> extends JPanel {
 		save(null);
 	}
 	
+	/**
+	 * retreive a standart JSpinner
+	 * @return
+	 */
+	protected JSpinner getSpinner() {
+		SpinnerModel model = new SpinnerNumberModel(0, -10000000, 10000000, 0.00001f);
+		JSpinner spinner = new JSpinner(model);
+		spinner.setEditor(new JSpinner.NumberEditor(spinner, "0.00000"));
+		JFormattedTextField jftf = ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField();
+		jftf.setColumns(5);
+		return spinner;
+	}
+	
 	protected void save(Consumer<Boolean> consumer) {
 		if(saveConsition != null && !saveConsition.getAsBoolean()) {
 			reset();
@@ -138,7 +152,6 @@ public abstract class FCSetter<T> extends JPanel {
 		serial.set(setter, parseValue(getVal()), succsess -> {
 			if(succsess) {
 				succsess();
-				lastVal = getVal();
 				if(consumer != null) consumer.accept(true);
 			} else {
 				System.out.println("couldnt save");

@@ -6,15 +6,11 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 
 import serial.FCCommand;
 
@@ -28,7 +24,6 @@ public class FCMat3Setter extends FCSetter<Double[]> {
 	private JButton saveBtn = new JButton("Save");
 	private JButton resetBtn = new JButton("Reset");
 	private JLabel label;
-	private float step = 0.00001f;
 
 	public FCMat3Setter(FCCommand getter, FCCommand setter, String label) {
 		super(getter, setter);
@@ -57,11 +52,7 @@ public class FCMat3Setter extends FCSetter<Double[]> {
 
 	private void initSpinners() {
 		for (int i = 0; i < 9; i++) {
-			SpinnerModel model = new SpinnerNumberModel(0, -10000000, 10000000, step);
-			JSpinner spinner = new JSpinner(model);
-			spinner.setEditor(new JSpinner.NumberEditor(spinner, "0.00000"));
-			JFormattedTextField jftf = ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField();
-			jftf.setColumns(5);
+			JSpinner spinner = getSpinner();
 			spinners.add(spinner);
 			spinnerPanel.add(spinner);
 		}
