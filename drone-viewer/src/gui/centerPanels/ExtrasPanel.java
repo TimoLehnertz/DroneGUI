@@ -18,6 +18,7 @@ public class ExtrasPanel extends CenterPanel {
 		super("Extras");
 		getBody().setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 		getBody().add(ledPanel, gbc);
 		
 		ledPanel.getBody().add(useLeds);

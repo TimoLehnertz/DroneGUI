@@ -26,10 +26,17 @@ public class FCNumberSetter extends FCSetter<Double> {
 	
 	private JPanel rightPanel = new JPanel();
 	private JPanel content = new JPanel();
-
+	
+	private boolean integer;
+	
 	public FCNumberSetter(FCCommand getter, FCCommand setter, String label) {
+		this(getter, setter, label, false);
+	}
+
+	public FCNumberSetter(FCCommand getter, FCCommand setter, String label, boolean integer) {
 		super(getter, setter);
 		this.label = new JLabel(label);
+		this.integer = integer;
 		
 		saveBtn.addActionListener(e -> save());
 		resetBtn.addActionListener(e -> reset());
@@ -61,7 +68,7 @@ public class FCNumberSetter extends FCSetter<Double> {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
 
-		JSpinner spinner = getSpinner();
+		JSpinner spinner = getSpinner(integer);
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;

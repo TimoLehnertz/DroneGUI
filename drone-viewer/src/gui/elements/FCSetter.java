@@ -131,9 +131,16 @@ public abstract class FCSetter<T> extends JPanel {
 	 * @return
 	 */
 	protected JSpinner getSpinner() {
-		SpinnerModel model = new SpinnerNumberModel(0, -10000000, 10000000, 0.00001f);
+		return getSpinner(false);
+	}
+	
+	protected JSpinner getSpinner(boolean integer) {
+		float step = integer ? 1 : 0.00001f;
+		SpinnerModel model = new SpinnerNumberModel(0, -10000000, 10000000, step);
 		JSpinner spinner = new JSpinner(model);
-		spinner.setEditor(new JSpinner.NumberEditor(spinner, "0.00000"));
+		if(!integer) {
+			spinner.setEditor(new JSpinner.NumberEditor(spinner, "0.00000"));
+		}
 		JFormattedTextField jftf = ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField();
 		jftf.setColumns(5);
 		return spinner;
