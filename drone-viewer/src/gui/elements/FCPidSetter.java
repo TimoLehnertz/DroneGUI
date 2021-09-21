@@ -13,7 +13,6 @@ public class FCPidSetter extends FCMUltiSetter {
 	}
 	
 	public FCPidSetter(FCCommand getter, FCCommand setter, String label, boolean useLabels) {
-		super(getter, setter, label, Arrays.asList("P", "I", "D", "D Lpf", "iMul", "I max Buildup", "I max out", "d Max"), useLabels);
+		super(getter, setter, label, Arrays.asList("P", "I", "D", "D Lpf", "max", "Aux tune"), useLabels);
 	}
-
 }

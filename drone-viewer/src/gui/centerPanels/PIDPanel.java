@@ -31,7 +31,6 @@ public class PIDPanel extends CenterPanel {
 	FCPidSetter levelPIDr = new FCPidSetter(FCCommand.FC_GET_LEVEL_PID_R, FCCommand.FC_SET_LEVEL_PID_R, "Roll", true);
 	FCPidSetter levelPIDp = new FCPidSetter(FCCommand.FC_GET_LEVEL_PID_P, FCCommand.FC_SET_LEVEL_PID_P, "Pitch", false);
 	FCPidSetter levelPIDy = new FCPidSetter(FCCommand.FC_GET_LEVEL_PID_Y, FCCommand.FC_SET_LEVEL_PID_Y, "Yaw", false);
-	FCNumberSetter levelFactor = new FCNumberSetter(FCCommand.FC_GET_LEVEL_FACTOR, FCCommand.FC_SET_LEVEL_FACTOR, "Level fector");
 	
 	public PIDPanel() {
 		super("PIDs");
@@ -72,7 +71,6 @@ public class PIDPanel extends CenterPanel {
 		levelPidPanel.add(levelPIDy);
 		
 		levelSection.getBody().add(levelPidPanel);
-		levelSection.getBody().add(levelFactor);
 		
 		getBody().setLayout(new GridBagLayout());
 		gbc.gridy = 0;
