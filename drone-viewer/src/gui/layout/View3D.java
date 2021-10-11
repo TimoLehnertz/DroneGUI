@@ -32,7 +32,6 @@ public class View3D extends JPanel implements SensorListener{
 		MyObject drone = canvas.getScenes().get(0).getObjects().get(1);
 		drone.setRot(rot);
 		drone.setLoc(loc);
-		drone.setScale(0.1);
 	}
 
 	@Override

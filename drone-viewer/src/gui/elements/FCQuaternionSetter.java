@@ -16,16 +16,17 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
+import maths.Quaternion;
 import maths.Vec3;
 import serial.FCCommand;
 
-public class FCVec3Setter extends FCSetter<Vec3> {
+public class FCQuaternionSetter extends FCSetter<Quaternion> {
 
 	private static final long serialVersionUID = 1L;
+
+private double step;
 	
-	private double step;
-	
-	protected static String[] VEC3_LABELS = {"x", "y", "z"};
+	protected static String[] VEC3_LABELS = {"w", "x", "y", "z"};
 	
 	private List<JSpinner> spinners = new ArrayList<>();
 	
@@ -36,11 +37,7 @@ public class FCVec3Setter extends FCSetter<Vec3> {
 	private JPanel rightPanel = new JPanel();
 	protected JPanel content = new JPanel();
 	
-	public FCVec3Setter(FCCommand getter, FCCommand setter, String label) {
-		this(getter, setter, label, 0.0001f);
-	}
-
-	public FCVec3Setter(FCCommand getter, FCCommand setter, String label, double step) {
+	public FCQuaternionSetter(FCCommand getter, FCCommand setter, String label) {
 		super(getter, setter);
 		this.label = new JLabel(label);
 		this.step = step;
@@ -66,9 +63,9 @@ public class FCVec3Setter extends FCSetter<Vec3> {
 		gbc.gridx = 1;
 		add(rightPanel, gbc);
 		
-		content.setLayout(new GridLayout(3, 1));
+		content.setLayout(new GridLayout(4, 1));
 		rightPanel.setLayout(new GridLayout(2, 1));
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 4; i++) {
 			addSpinnerPanel(VEC3_LABELS[i]);
 		}
 		fcFieldEnable(false);
@@ -117,28 +114,30 @@ public class FCVec3Setter extends FCSetter<Vec3> {
 	}
 
 	@Override
-	protected Vec3 parseString(String strVal) {
-		return new Vec3(strVal);
+	protected Quaternion parseString(String strVal) {
+		return new Quaternion(strVal);
 	}
 
 	@Override
-	protected String parseValue(Vec3 objVal) {
-		return objVal.toString();
+	protected String parseValue(Quaternion quat) {
+		return quat.toString();
 	}
 
 	@Override
-	protected void setVal(Vec3 val) {
-		if(val == null) val = new Vec3();
-		spinners.get(0).setValue(val.x);
-		spinners.get(1).setValue(val.y);
-		spinners.get(2).setValue(val.z);
+	protected void setVal(Quaternion val) {
+		if(val == null) val = new Quaternion();
+		spinners.get(0).setValue(val.w);
+		spinners.get(1).setValue(val.x);
+		spinners.get(2).setValue(val.y);
+		spinners.get(3).setValue(val.z);
 	}
 
 	@Override
-	public Vec3 getVal() {
-		return new Vec3(
+	public Quaternion getVal() {
+		return new Quaternion(
 				(double) spinners.get(0).getValue(),
 				(double) spinners.get(1).getValue(),
-				(double) spinners.get(2).getValue());
+				(double) spinners.get(2).getValue(),
+				(double) spinners.get(3).getValue());
 	}
 }

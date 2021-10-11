@@ -70,6 +70,13 @@ public abstract class FCSetter<T> extends JPanel {
 	/**
 	 * initiates the get Call and sets the setters value to the received value
 	 */
+	public void get(int delay) {
+		Timer t = new Timer(delay, e -> {
+			((Timer) e.getSource()).stop();
+			get(false);
+		});
+		t.start();
+	}
 	public void get() {
 		get(false);
 	}
@@ -130,11 +137,11 @@ public abstract class FCSetter<T> extends JPanel {
 	 * retreive a standart JSpinner
 	 * @return
 	 */
-	protected JSpinner getSpinner() {
+	public static JSpinner getSpinner() {
 		return getSpinner(false);
 	}
 	
-	protected JSpinner getSpinner(boolean integer) {
+	public static JSpinner getSpinner(boolean integer) {
 		float step = integer ? 1 : 0.00001f;
 		SpinnerModel model = new SpinnerNumberModel(0, -10000000, 10000000, step);
 		JSpinner spinner = new JSpinner(model);

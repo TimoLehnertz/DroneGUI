@@ -70,7 +70,8 @@ public class SerialInterface implements SerialReceiveListener {
 	}
 	
 	public void set(FCCommand setter, Object value) {
-		set(setter, value, null);
+//		set(setter, value, null);
+		set(setter, value, (e) -> {});
 	}
 	
 	public void set(FCCommand setter, Object value, SetListener listener) {

@@ -2,7 +2,7 @@ package gui.layout;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -18,7 +18,6 @@ import gui.centerPanels.FCPanel;
 import gui.centerPanels.InsPanel;
 import gui.centerPanels.MotorPanel;
 import gui.centerPanels.PIDPanel;
-import gui.centerPanels.RadioPanel;
 import gui.centerPanels.SensorPanel;
 
 public class Explorer extends JPanel {
@@ -29,7 +28,7 @@ public class Explorer extends JPanel {
 	private JPanel body = new JPanel();
 	private GuiLogic logic = GuiLogic.getInstance();
 	
-	private final Map<JButton, JComponent> entries = new HashMap<>();
+	private final Map<JButton, JComponent> entries = new LinkedHashMap<>();
 	
 	public Explorer() {
 		super();
@@ -42,7 +41,7 @@ public class Explorer extends JPanel {
 		
 		entries.put(new JButton("Sensors"), sensorPanel);
 		entries.put(new JButton("INS"), new InsPanel());
-		entries.put(new JButton("Radio"), new RadioPanel());
+//		entries.put(new JButton("Radio"), new RadioPanel());
 		entries.put(new JButton("Motors"), new MotorPanel());
 		entries.put(new JButton("PIDs"), new PIDPanel());
 		entries.put(new JButton("FC"), new FCPanel());

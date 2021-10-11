@@ -7,13 +7,18 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.Timer;
 
 import gui.GuiLogic;
 import gui.elements.FCBooleanSetter;
 import gui.elements.FCMat3Setter;
+import gui.elements.FCNumberSetter;
+import gui.elements.FCQuaternionSetter;
+import gui.elements.FCSetter;
 import gui.elements.FCVec3Setter;
 import gui.elements.SectionPanel;
+import popups.AccCalibFrame;
 import popups.MagCalibFrame;
 import serial.FCCommand;
 import serial.SerialInterface;
@@ -27,36 +32,49 @@ public class SensorPanel extends CenterPanel {
 	SerialInterface serial = logic.getSerialInterface();
 
 	SectionPanel gyro = new SectionPanel("Gyroscope");
-	SectionPanel acc = new SectionPanel("Accelerometer");
-	SectionPanel mag = new SectionPanel("Magnetometer");
+	SectionPanel acc  = new SectionPanel("Accelerometer");
+	SectionPanel mag  = new SectionPanel("Magnetometer");
 	SectionPanel baro = new SectionPanel("Barometer");
-	SectionPanel gps = new SectionPanel("GPS");
+	SectionPanel gps  = new SectionPanel("GPS");
+	SectionPanel bat  = new SectionPanel("Battery");
 	
 	SectionPanel telemSection = new SectionPanel("Telemetry");
 	
-	FCBooleanSetter accTelem = 	new FCBooleanSetter(FCCommand.FC_GET_USE_ACC_TELEM, FCCommand.FC_SET_ACC_TELEM, "Accelerometer");
-	FCBooleanSetter gyroTelem = new FCBooleanSetter(FCCommand.FC_GET_USE_GYRO_TELEM, FCCommand.FC_SET_GYRO_TELEM, "Gyroscope");
-	FCBooleanSetter magTelem = 	new FCBooleanSetter(FCCommand.FC_GET_USE_MAG_TELEM, FCCommand.FC_SET_MAG_TELEM, "Magnetometer");
-	FCBooleanSetter baroTelem = new FCBooleanSetter(FCCommand.FC_GET_USE_BARO_TELEM, FCCommand.FC_SET_BARO_TELEM, "Barometer");
-	FCBooleanSetter gpsTelem = 	new FCBooleanSetter(FCCommand.FC_GET_USE_GPS_TELEM, FCCommand.FC_SET_GPS_TELEM, "GPS");
-	FCBooleanSetter attiTelem = new FCBooleanSetter(FCCommand.FC_GET_USE_ATTI_TELEM, FCCommand.FC_SET_ATTI_TELEM, "Attitude");
-	FCBooleanSetter quatTelem = new FCBooleanSetter(FCCommand.FC_GET_USE_QUAT_TELEM, FCCommand.FC_SET_QUAT_TELEM, "Quaternion Rot");
-	FCBooleanSetter velTelem = 	new FCBooleanSetter(FCCommand.FC_GET_USE_VEL_TELEM, FCCommand.FC_SET_VEL_TELEM, "Velocity");
-	FCBooleanSetter locTelem = 	new FCBooleanSetter(FCCommand.FC_GET_USE_LOC_TELEM, FCCommand.FC_SET_LOC_TELEM, "Location");
-	FCBooleanSetter timingTelem=new FCBooleanSetter(FCCommand.FC_GET_USE_TIMING, FCCommand.FC_SET_USE_TIMING, "Timing");
-	FCBooleanSetter rcTelem	   =new FCBooleanSetter(FCCommand.FC_GET_USE_RC_TELEM, FCCommand.FC_SET_USE_RC_TELEM, "RC chanels");
-	FCBooleanSetter fcTelem	   =new FCBooleanSetter(FCCommand.FC_GET_USE_FC_TELEM, FCCommand.FC_SET_USE_FC_TELEM, "FC");
+	FCBooleanSetter accTelem 	= new FCBooleanSetter(FCCommand.FC_GET_USE_ACC_TELEM, FCCommand.FC_SET_ACC_TELEM, "Accelerometer");
+	FCBooleanSetter gyroTelem	= new FCBooleanSetter(FCCommand.FC_GET_USE_GYRO_TELEM, FCCommand.FC_SET_GYRO_TELEM, "Gyroscope");
+	FCBooleanSetter magTelem 	= new FCBooleanSetter(FCCommand.FC_GET_USE_MAG_TELEM, FCCommand.FC_SET_MAG_TELEM, "Magnetometer");
+	FCBooleanSetter baroTelem	= new FCBooleanSetter(FCCommand.FC_GET_USE_BARO_TELEM, FCCommand.FC_SET_BARO_TELEM, "Barometer");
+	FCBooleanSetter gpsTelem 	= new FCBooleanSetter(FCCommand.FC_GET_USE_GPS_TELEM, FCCommand.FC_SET_GPS_TELEM, "GPS");
+	FCBooleanSetter attiTelem 	= new FCBooleanSetter(FCCommand.FC_GET_USE_ATTI_TELEM, FCCommand.FC_SET_ATTI_TELEM, "Attitude");
+	FCBooleanSetter quatTelem 	= new FCBooleanSetter(FCCommand.FC_GET_USE_QUAT_TELEM, FCCommand.FC_SET_QUAT_TELEM, "Quaternion Rot");
+	FCBooleanSetter velTelem 	= new FCBooleanSetter(FCCommand.FC_GET_USE_VEL_TELEM, FCCommand.FC_SET_VEL_TELEM, "Velocity");
+	FCBooleanSetter locTelem 	= new FCBooleanSetter(FCCommand.FC_GET_USE_LOC_TELEM, FCCommand.FC_SET_LOC_TELEM, "Location");
+	FCBooleanSetter timingTelem	= new FCBooleanSetter(FCCommand.FC_GET_USE_TIMING, FCCommand.FC_SET_USE_TIMING, "Timing");
+	FCBooleanSetter rcTelem	   	= new FCBooleanSetter(FCCommand.FC_GET_USE_RC_TELEM, FCCommand.FC_SET_USE_RC_TELEM, "RC chanels");
+	FCBooleanSetter fcTelem	   	= new FCBooleanSetter(FCCommand.FC_GET_USE_FC_TELEM, FCCommand.FC_SET_USE_FC_TELEM, "FC");
+	FCBooleanSetter batTelem   	= new FCBooleanSetter(FCCommand.FC_GET_USE_BAT_TELEM, FCCommand.FC_SET_BAT_TELEM, "Bat");
 	
-	JButton calibrateAccBtn = new JButton("Calibrate");
+	FCNumberSetter batLpf   	= new FCNumberSetter(FCCommand.FC_GET_BAT_LPF, FCCommand.FC_SET_BAT_LPF, "Bat low pass Filter");
+	FCBooleanSetter useBatCell 	= new FCBooleanSetter(FCCommand.FC_GET_USE_VCELL, FCCommand.FC_SET_USE_VCELL, "Report cell voltage");
+		
+	JButton calibrateAccBtn = new JButton("Quick calibration");
+	JButton calibrateAccBtnAdvanced = new JButton("Advanced calibration");
+	JButton accAngleBtn = new JButton("Set acc angle offset");
 	JButton calibrateGyroBtn = new JButton("Calibrate");
 	JButton calibrateMagBtn = new JButton("Calibrate");
 	
+	JLabel batInfoLabel = new JLabel("Enter actual battery voltage and hit Calibrate");
+	JSpinner batCalibSpinner = FCSetter.getSpinner();
+	JButton batCalibBtn = new JButton("Calibrate");
+	
 	FCVec3Setter accOffset;
-	FCVec3Setter accMul;
+	FCMat3Setter accMul;
+	FCQuaternionSetter accAngleOffset;
 	FCVec3Setter gyroOffset;
 	FCVec3Setter gyroMul;
 	FCVec3Setter magHardIron;
 	FCMat3Setter magSoftIron;
+	
 	
 	public SensorPanel() {
 		super("Sensors");
@@ -81,14 +99,20 @@ public class SensorPanel extends CenterPanel {
 		gbc.gridy = 4;
 		getBody().add(gps, gbc);
 		gbc.gridy = 5;
+		getBody().add(bat, gbc);
+		gbc.gridy = 6;
 		getBody().add(telemSection, gbc);
 		
 		accOffset = new FCVec3Setter(FCCommand.FC_GET_ACC_OFFSET, FCCommand.FC_SET_ACC_OFFSET, "Offset");
-		accMul = new FCVec3Setter(FCCommand.FC_GET_ACC_MUL, FCCommand.FC_SET_ACC_MUL, "Multiplicator");
+		accMul = new FCMat3Setter(FCCommand.FC_GET_ACC_MUL, FCCommand.FC_SET_ACC_MUL, "Multiplicator");
+		accAngleOffset = new FCQuaternionSetter(FCCommand.FC_GET_ACC_ANGLE_OFFSET, FCCommand.FC_SET_ACC_ANGLE_OFFSET, "Quaternion Angle offset");
 		JPanel calibAccPanel = new JPanel();
 		calibAccPanel.add(calibrateAccBtn);
 		calibrateAccBtn.addActionListener((e) -> {serial.sendDo(FCCommand.FC_DO_ACC_CALIB); refreshAccOffset();});
-		calibAccPanel.add(new JLabel("<html>For calibration place the drone<br><b>level</b> on the ground and<br><b>dont have it moving</b> a second<br>before the calibration</html>"));
+		calibAccPanel.add(calibrateAccBtnAdvanced);
+		calibAccPanel.add(accAngleBtn);
+		accAngleBtn.addActionListener(e -> {serial.sendDo(FCCommand.FC_DO_SET_ACC_ANGLE_OFFSET); accAngleOffset.get(100);});
+		calibrateAccBtnAdvanced.addActionListener((e) -> logic.popup(new AccCalibFrame(), true));
 		
 		gyroOffset = new FCVec3Setter(FCCommand.FC_GET_GYRO_OFFSET, FCCommand.FC_SET_GYRO_OFFSET, "Offset");
 		gyroMul = new FCVec3Setter(FCCommand.FC_GET_GYRO_MUL, FCCommand.FC_SET_GYRO_MUL, "Multiplicator");
@@ -104,6 +128,35 @@ public class SensorPanel extends CenterPanel {
 		calibrateMagBtn.addActionListener((e) -> logic.popup(new MagCalibFrame(), true));
 		calibMagPanel.add(new JLabel("<html>Open magnetometer calibration</html>"));
 		
+		/**
+		 * Bat
+		 */
+		gbc.gridy = 0;
+		gbc.gridx = 0;
+		
+		bat.getBody().setLayout(new GridBagLayout());
+		bat.getBody().add(batInfoLabel, gbc);
+		gbc.gridx = 1;
+		bat.getBody().add(batCalibSpinner, gbc);
+		gbc.gridx = 2;
+		bat.getBody().add(batCalibBtn, gbc);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		bat.getBody().add(batLpf, gbc);
+		gbc.gridx = 1;
+		bat.getBody().add(useBatCell, gbc);
+		
+		batCalibSpinner.setValue(15);
+		batCalibBtn.addActionListener(e -> {
+			double voltage = (double) batCalibSpinner.getValue();
+			System.out.println(voltage);
+			serial.set(FCCommand.FC_SET_VOLTAGE_CALIB, voltage, s -> {
+				if(s) {
+					System.out.println("Succsessfully calibrated vBat");
+				}
+			});
+		});
+		
 		gbc.gridy = 0;
 		gbc.gridx = 0;
 		gbc.ipadx = 5;
@@ -115,6 +168,8 @@ public class SensorPanel extends CenterPanel {
 		acc.getBody().add(accOffset, gbc);
 		gbc.gridx = 1;
 		acc.getBody().add(accMul, gbc);
+		gbc.gridx = 2;
+		acc.getBody().add(accAngleOffset, gbc);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.gridwidth = 2;
@@ -171,6 +226,9 @@ public class SensorPanel extends CenterPanel {
 		telemSection.getBody().add(rcTelem);
 		gbc.gridy = 2;
 		telemSection.getBody().add(fcTelem);
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		telemSection.getBody().add(batTelem);
 		
 		setEnabled(false);
 	}
@@ -195,7 +253,11 @@ public class SensorPanel extends CenterPanel {
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
 		calibrateAccBtn.setEnabled(enabled);
+		calibrateAccBtnAdvanced.setEnabled(enabled);
+		accAngleBtn.setEnabled(enabled);
 		calibrateGyroBtn.setEnabled(enabled);
 		calibrateMagBtn.setEnabled(enabled);
+		batCalibBtn.setEnabled(enabled);
+		batCalibSpinner.setEnabled(enabled);
 	}
 }

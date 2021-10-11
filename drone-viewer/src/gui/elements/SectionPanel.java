@@ -3,7 +3,6 @@ package gui.elements;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.LayoutManager;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
