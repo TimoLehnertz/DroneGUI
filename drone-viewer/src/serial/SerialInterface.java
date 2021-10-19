@@ -13,7 +13,7 @@ public class SerialInterface implements SerialReceiveListener {
 
 	private static SerialInterface instance = null;
 	private Serial serial;
-	private static final double SETTER_TIMEOUT = 1;//seconds
+	private static final double SETTER_TIMEOUT = 2;//seconds
 
 	long uid = 0; //uid used for getters and setters
 	

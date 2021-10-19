@@ -149,7 +149,7 @@ public class MagCalibFrame extends JFrame implements SensorListener{
 	}
 	
 	private void stop() {
-		serial.sendDo(FCCommand.FC_DO_STOP_MAG_CALIB);
+//		serial.sendDo(FCCommand.FC_DO_STOP_MAG_CALIB);
 		infoLabel.setText("Choose a file to save the generated sensor data to");
 		startBtn.setVisible(true);
 		stopBtn.setVisible(false);
