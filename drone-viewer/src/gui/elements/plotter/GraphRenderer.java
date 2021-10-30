@@ -18,7 +18,7 @@ public class GraphRenderer extends JPanel {
 	private static Color COLOR_LINE = Color.darkGray;
 	private double minSpan = 3000.0;
 	private double maxSpan = 3000.0;
-	private boolean keepCenter = true;
+	private boolean keepCenter = false;
 	private int lineMargin = 25;
 
 	private double padding = 0.3;//	multiplicator
@@ -107,7 +107,7 @@ public class GraphRenderer extends JPanel {
 			g.setColor(Color.white);
 			double lastVal = graph.getVals().get(graph.getVals().size() - 1);
 			Point p = getPoint(0, lastVal);
-			p.x = getWidth() - 30;
+			p.x = getWidth() - 80;
 			g.drawString(lastVal + "", p.x, p.y);
 		}
 		/**
@@ -139,7 +139,7 @@ public class GraphRenderer extends JPanel {
 	
 	private double getMinTime(double maxTime) {
 		if(graphs.size() == 0) return 0;
-		double min = graphs.get(0).getMinTime();
+		double min = Double.MAX_VALUE;
 		for (Graph graph : graphs) {
 			min = Math.min(min, graph.getMinTime());
 		}
@@ -148,7 +148,8 @@ public class GraphRenderer extends JPanel {
 		 */
 		double absMax = maxTime - minSpan;
 		double absMin = maxTime - maxSpan;
-		return Math.max(absMin, Math.min(absMax, min));
+		return maxTime - maxSpan;
+//		return Math.max(absMin, Math.min(absMax, min));
 //		return min;
 	}
 	
@@ -163,7 +164,7 @@ public class GraphRenderer extends JPanel {
 	
 	private double getMinVal(double minTime, double maxTime) {
 		if(graphs.size() == 0) return 0;
-		double min = graphs.get(0).getMinVal(minTime, maxTime);
+		double min = Double.MAX_VALUE;
 		for (Graph graph : graphs) {
 			if(!graph.isVisible()) continue;
 			min = Math.min(min, graph.getMinVal(minTime, maxTime));
@@ -173,7 +174,7 @@ public class GraphRenderer extends JPanel {
 	
 	private double getMaxVal(double minTime, double maxTime) {
 		if(graphs.size() == 0) return 1;
-		double max = graphs.get(0).getMaxVal(minTime, maxTime);
+		double max = Double.MIN_VALUE;
 		for (Graph graph : graphs) {
 			if(!graph.isVisible()) continue;
 			max = Math.max(max, graph.getMaxVal(minTime, maxTime));

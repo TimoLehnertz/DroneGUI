@@ -22,18 +22,18 @@ public abstract class FCSetter<T> extends JPanel {
 	private FCCommand setter;
 	protected boolean disableOnSave = true;
 	GuiLogic logic = GuiLogic.getInstance();
-	
+
 	public BooleanSupplier saveConsition = null;
-	
+
 	private SerialInterface serial = GuiLogic.getInstance().getSerialInterface();
-	
+
 	public FCSetter(FCCommand getter, FCCommand setter) {
 		super();
 		serial.addOpenListeners(() -> {
-			if(logic.isLiteMode()) {
+			if (logic.isLiteMode()) {
 				fcFieldEnable(true);
-			} else {				
-				get();	
+			} else {
+				get();
 			}
 		});
 		this.getter = getter;
@@ -41,17 +41,17 @@ public abstract class FCSetter<T> extends JPanel {
 		serial.addFcSetterListener(this);
 		get();
 	}
-	
+
 	/**
 	 * displays succsess
 	 */
 	protected abstract void succsess();
-	
+
 	/**
 	 * Displays an error
 	 */
 	protected abstract void error();
-	
+
 	/**
 	 * Resets the FCSetter to the value of lastVal
 	 */
@@ -60,13 +60,14 @@ public abstract class FCSetter<T> extends JPanel {
 //		setVal(lastVal);
 //		setEnabledTrueDelay(100);
 	}
-	
+
 	/**
 	 * Sets the enabled status for this Setter
+	 * 
 	 * @param enabled
 	 */
 	public abstract void fcFieldEnable(boolean enabled);
-	
+
 	/**
 	 * initiates the get Call and sets the setters value to the received value
 	 */
@@ -77,14 +78,18 @@ public abstract class FCSetter<T> extends JPanel {
 		});
 		t.start();
 	}
+
 	public void get() {
 		get(false);
 	}
+
 	public void get(boolean force) {
-		if(!force && logic.isLiteMode()) return;
-		if(!serial.isConnected()) return;
+		if (!force && logic.isLiteMode())
+			return;
+		if (!serial.isConnected())
+			return;
 		serial.get(getter, (succsess, res) -> {
-			if(!succsess) {
+			if (!succsess) {
 				System.out.println("retrying to get " + getter.name());
 				get();
 				return;
@@ -93,34 +98,37 @@ public abstract class FCSetter<T> extends JPanel {
 			setEnabledTrueDelay(100);
 		});
 	}
-	
+
 	private void setEnabledTrueDelay(int delay) {
 		Timer t = new Timer(100, e -> {
-			((Timer) e.getSource()).stop();				
+			((Timer) e.getSource()).stop();
 			fcFieldEnable(true);
 		});
 		t.start();
 	}
-	
+
 	/**
-	 * parses a string received from the fc into a useful format
-	 * has to return a new instance every time called
+	 * parses a string received from the fc into a useful format has to return a new
+	 * instance every time called
+	 * 
 	 * @param val
 	 */
 	protected abstract T parseString(String strVal);
-	
+
 	/**
 	 * parses an Object value into a string to be send to the fc
+	 * 
 	 * @param val
 	 */
 	protected abstract String parseValue(T objVal);
-	
+
 	/**
 	 * Sets this Field to the Objects value
+	 * 
 	 * @param val
 	 */
 	protected abstract void setVal(T val);
-	
+
 	/**
 	 * @return this fields Value
 	 */
@@ -132,51 +140,55 @@ public abstract class FCSetter<T> extends JPanel {
 	protected void save() {
 		save(null);
 	}
-	
+
 	/**
 	 * retreive a standart JSpinner
+	 * 
 	 * @return
 	 */
 	public static JSpinner getSpinner() {
 		return getSpinner(false);
 	}
-	
+
 	public static JSpinner getSpinner(boolean integer) {
 		float step = integer ? 1 : 0.00001f;
 		SpinnerModel model = new SpinnerNumberModel(0, -10000000, 10000000, step);
 		JSpinner spinner = new JSpinner(model);
-		if(!integer) {
+		if (!integer) {
 			spinner.setEditor(new JSpinner.NumberEditor(spinner, "0.00000"));
 		}
 		JFormattedTextField jftf = ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField();
 		jftf.setColumns(5);
 		return spinner;
 	}
-	
+
 	protected void save(Consumer<Boolean> consumer) {
-		if(saveConsition != null && !saveConsition.getAsBoolean()) {
+		if (saveConsition != null && !saveConsition.getAsBoolean()) {
 			reset();
 			System.out.println("Condition for " + getter.name() + " is false!");
-			if(consumer != null) consumer.accept(false);
+			if (consumer != null)
+				consumer.accept(false);
 			return;
 		}
-		if(disableOnSave) {
+		if (disableOnSave) {
 			fcFieldEnable(false);
 		}
 		serial.set(setter, parseValue(getVal()), succsess -> {
-			if(succsess) {
+			if (succsess) {
 				succsess();
-				if(consumer != null) consumer.accept(true);
+				if (consumer != null)
+					consumer.accept(true);
 			} else {
 				System.out.println("couldnt save");
 				error();
 				reset();
-				if(consumer != null) consumer.accept(false);
+				if (consumer != null)
+					consumer.accept(false);
 			}
 			setEnabledTrueDelay(100);
 		});
 	}
-	
+
 	public void refresh() {
 		get();
 	}

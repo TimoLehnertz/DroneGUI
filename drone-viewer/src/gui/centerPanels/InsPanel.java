@@ -40,14 +40,14 @@ public class InsPanel extends CenterPanel {
 		FCNumberSetter accInf = new FCNumberSetter(FCCommand.FC_GET_COMPLEMENTARY_ACC_INF, FCCommand.FC_SET_COMPLEMENTARY_ACC_INF, "Acc. influence:");
 		FCNumberSetter magInf = new FCNumberSetter(FCCommand.FC_GET_COMPLEMENTARY_MAG_INF, FCCommand.FC_SET_COMPLEMENTARY_MAG_INF, "Mag. influence:");
 		
-		FCNumberSetter accMaxGError = new FCNumberSetter(FCCommand.FC_GET_INS_ACC_MAX_G, FCCommand.FC_SET_INS_ACC_MAX_G, "Max Acc G Error for rot");
+//		FCNumberSetter accMaxGError = new FCNumberSetter(FCCommand.FC_GET_INS_ACC_MAX_G, FCCommand.FC_SET_INS_ACC_MAX_G, "Max Acc G Error for rot");
 		
 		FCNumberSetter sensorFusionSelect = new FCNumberSetter(FCCommand.FC_GET_SENSOR_FUSION, FCCommand.FC_SET_SENSOR_FUSION, "Sensor fusion algorythm(0: Complementary, 1 Magdwick)");
 		
 		sensorFusion.add(sensorFusionSelect);
 		sensorFusion.add(accInf);
 		sensorFusion.add(magInf);
-		sensorFusion.add(accMaxGError);
+//		sensorFusion.add(accMaxGError);
 		
 		add(resetBtn);
 		resetBtn.addActionListener(e -> {

@@ -80,7 +80,7 @@ public class FCLiveSlider extends FCSetter<Double> {
 	}
 
 	@Override
-	protected void setVal(Double val) {
+	public void setVal(Double val) {
 		slider.setValue((int) Math.round(val));
 		valueLabel.setText("" + val);
 	}

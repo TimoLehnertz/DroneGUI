@@ -92,13 +92,10 @@ public class Graph {
 	
 	public double getMinVal(double minTime, double maxTime) {
 		if(vals.size() == 0) return 0;
-		double min = vals.get(0);
-		if(Double.isNaN(min)) {
-			min = 0;
-		}
+		double min = Double.MAX_VALUE;
 		for (int i = 0; i < entrySize; i++) {
 			try {
-				if(times.get(i) > minTime && times.get(i) < maxTime) {
+				if(times.get(i) >= minTime && times.get(i) <= maxTime) {
 					min = Math.min(vals.get(i), min);
 				}
 			} catch(Exception e) {
@@ -110,12 +107,9 @@ public class Graph {
 	
 	public double getMaxVal(double minTime, double maxTime) {
 		if(vals.size() == 0) return 1;
-		double max = vals.get(0);
-		if(Double.isNaN(max)) {
-			max = 0;
-		}
+		double max = Double.MIN_VALUE;
 		for (int i = 0; i < entrySize; i++) {
-			if(times.get(i) > minTime && times.get(i) < maxTime) {
+			if(times.get(i) >= minTime && times.get(i) <= maxTime) {
 				max = Math.max(vals.get(i), max);
 			}
 		}

@@ -58,7 +58,7 @@ public class SerialInterface implements SerialReceiveListener {
 		getters.put(uid, receiver);
 		send(command.name() + " " + uid);
 		long uidCpy = uid;
-		Timer t = new Timer((int) (SETTER_TIMEOUT * 1000), e -> {
+		Timer t = new Timer((int) (SETTER_TIMEOUT * 10000), e -> {
 			((Timer) e.getSource()).stop();
 			if(getters.containsKey(uidCpy)) {
 				getters.get(uidCpy).receive(false, null);

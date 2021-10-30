@@ -13,7 +13,6 @@ import javax.swing.Timer;
 import gui.GuiLogic;
 import gui.elements.FCBooleanSetter;
 import gui.elements.FCNumberSetter;
-import gui.elements.FCQuaternionSetter;
 import gui.elements.FCSetter;
 import gui.elements.FCVec3Setter;
 import gui.elements.SectionPanel;
@@ -120,7 +119,7 @@ public class SensorPanel extends CenterPanel {
 		calibrateAccBtnAdvanced.addActionListener((e) -> serial.sendDo(FCCommand.FC_DO_ACC_CALIB));
 		
 		gyroOffset = new FCVec3Setter(FCCommand.FC_GET_GYRO_OFFSET, FCCommand.FC_SET_GYRO_OFFSET, "Offset");
-		gyroMul = new FCVec3Setter(FCCommand.FC_GET_GYRO_MUL, FCCommand.FC_SET_GYRO_MUL, "Multiplicator");
+//		gyroMul = new FCVec3Setter(FCCommand.FC_GET_GYRO_MUL, FCCommand.FC_SET_GYRO_MUL, "Multiplicator");
 		JPanel calibGyroPanel = new JPanel();
 		calibGyroPanel.add(calibrateGyroBtn);
 		calibrateGyroBtn.addActionListener((e) -> {serial.sendDo(FCCommand.FC_DO_GYRO_CALIB); refreshGyroOffset();});
@@ -242,13 +241,13 @@ public class SensorPanel extends CenterPanel {
 		setEnabled(false);
 	}
 	
-	private void refreshAccOffset() {
-		Timer t = new Timer(100, e -> {
-			accOffset.refresh();
-			((Timer) e.getSource()).stop();
-		});
-		t.start();
-	}
+//	private void refreshAccOffset() {
+//		Timer t = new Timer(100, e -> {
+//			accOffset.refresh();
+//			((Timer) e.getSource()).stop();
+//		});
+//		t.start();
+//	}
 	
 	private void refreshGyroOffset() {
 		Timer t = new Timer(100, e -> {
