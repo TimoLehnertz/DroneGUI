@@ -32,11 +32,20 @@ public class PIDPanel extends CenterPanel {
 	FCPidSetter levelPIDp = new FCPidSetter(FCCommand.FC_GET_LEVEL_PID_P, FCCommand.FC_SET_LEVEL_PID_P, "Pitch", false);
 	FCPidSetter levelPIDy = new FCPidSetter(FCCommand.FC_GET_LEVEL_PID_Y, FCCommand.FC_SET_LEVEL_PID_Y, "Yaw", false);
 	
+	// Altitude
+	FCPidSetter altitudePID = new FCPidSetter(FCCommand.FC_GET_ALTITUDE_PID, FCCommand.FC_SET_ALTITUDE_PID, "Altitude", true);
+	
+	// Velocity
+	FCPidSetter velPID = new FCPidSetter(FCCommand.FC_GET_VEL_PID, FCCommand.FC_SET_VEL_PID, "Velocity X/Y", true);
+	
+	
 	public PIDPanel() {
 		super("PIDs");
 		
 		SectionPanel rateSection = new SectionPanel("Rate PIDs");
 		SectionPanel levelSection = new SectionPanel("Level PIDs");
+		SectionPanel altitudeSection = new SectionPanel("Altitude PIDs");
+		SectionPanel velocitySection = new SectionPanel("Velocity PIDs");
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -69,13 +78,30 @@ public class PIDPanel extends CenterPanel {
 		levelPidPanel.add(levelPIDr);
 		levelPidPanel.add(levelPIDp);
 		levelPidPanel.add(levelPIDy);
-		
 		levelSection.getBody().add(levelPidPanel);
+		
+		/**
+		 * Altitude
+		 */
+		JPanel altitudePidPanel = new JPanel(new GridLayout(1, 1));
+		altitudePidPanel.add(altitudePID);
+		altitudeSection.getBody().add(altitudePidPanel);
+		
+		/**
+		 * Velocity
+		 */
+		JPanel velocityPidPanel = new JPanel(new GridLayout(1, 1));
+		velocityPidPanel.add(velPID);
+		velocitySection.getBody().add(velocityPidPanel);
 		
 		getBody().setLayout(new GridBagLayout());
 		gbc.gridy = 0;
 		getBody().add(rateSection, gbc);
 		gbc.gridy = 1;
 		getBody().add(levelSection, gbc);
+		gbc.gridy = 2;
+		getBody().add(altitudeSection, gbc);
+		gbc.gridy = 3;
+		getBody().add(velocitySection, gbc);
 	}
 }
