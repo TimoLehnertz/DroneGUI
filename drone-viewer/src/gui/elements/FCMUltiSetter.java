@@ -5,11 +5,13 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.IntConsumer;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.event.ChangeListener;
 
 import serial.FCCommand;
 
@@ -21,6 +23,8 @@ public class FCMUltiSetter extends FCSetter<Double[]> {
 	private List<String> labels = new ArrayList<>();
 	private JButton saveBtn = new JButton("Save");
 	private JButton resetBtn = new JButton("Reset");
+	
+	private List<ChangeListener> changeListeners = new ArrayList<>();
 	
 	public FCMUltiSetter(FCCommand getter, FCCommand setter, String label, List<String> labels) {
 		this(getter, setter, label, labels, true);
@@ -59,6 +63,11 @@ public class FCMUltiSetter extends FCSetter<Double[]> {
 			if(i % 2 == 0) {
 				JSpinner.NumberEditor jsEditor = (JSpinner.NumberEditor) spinner.getEditor(); jsEditor.getTextField().setBackground(Color.LIGHT_GRAY);
 			}
+			spinner.addChangeListener(e -> {
+				for (ChangeListener changeListener : changeListeners) {
+					changeListener.stateChanged(null);
+				}
+			});
 			spinners.add(spinner);
 			center.add(spinner);
 		}
@@ -93,10 +102,9 @@ public class FCMUltiSetter extends FCSetter<Double[]> {
 
 	@Override
 	protected Double[] parseString(String strVal) {
-		String[] split = strVal.split(",");
+		String[] split = strVal.substring(1).split(",");
 		Double[] arr = new Double[spinners.size()];
 		if(split.length != arr.length) {
-			System.out.println("moin");
 			return arr;
 		}
 		for (int i = 0; i < split.length; i++) {
@@ -111,11 +119,12 @@ public class FCMUltiSetter extends FCSetter<Double[]> {
 		for (Double val : arr) {
 			str += "," + val;
 		}
-		return str;
+		return str + ",";
 	}
 
 	@Override
 	protected void setVal(Double[] val) {
+		if(val.length != spinners.size()) return;
 		for (int i = 0; i < spinners.size(); i++) {
 			spinners.get(i).setValue(val[i]);
 		}
@@ -130,4 +139,11 @@ public class FCMUltiSetter extends FCSetter<Double[]> {
 		return arr;
 	}
 
+	public void addChangeListener(ChangeListener e) {
+		changeListeners.add(e);
+	}
+	
+	public boolean removeChangeListener(ChangeListener e) {
+		return changeListeners.remove(e);
+	}
 }

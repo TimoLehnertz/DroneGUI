@@ -2,6 +2,7 @@ package gui.elements;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -24,8 +25,6 @@ public class FCVec3Setter extends FCSetter<Vec3> {
 	private static final long serialVersionUID = 1L;
 	
 	private double step;
-	
-	protected static String[] VEC3_LABELS = {"x", "y", "z"};
 	
 	private List<JSpinner> spinners = new ArrayList<>();
 	
@@ -69,14 +68,14 @@ public class FCVec3Setter extends FCSetter<Vec3> {
 		content.setLayout(new GridLayout(3, 1));
 		rightPanel.setLayout(new GridLayout(2, 1));
 		for (int i = 0; i < 3; i++) {
-			addSpinnerPanel(VEC3_LABELS[i]);
+			addSpinnerPanel(getLabels()[i]);
 		}
 		fcFieldEnable(false);
 	}
 	
 	private void addSpinnerPanel(String label) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridBagLayout());
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+//		panel.setLayout(new GridBagLayout());
 		
 		SpinnerModel model = new SpinnerNumberModel(0, -10000000, 10000000, step);
 		JSpinner spinner = new JSpinner(model);
@@ -94,6 +93,11 @@ public class FCVec3Setter extends FCSetter<Vec3> {
 		
 		content.add(panel);
 		spinners.add(spinner);
+	}
+	
+	protected String[] getLabels() {
+		String[] labels = {"x", "y", "z"};
+		return labels;
 	}
 
 	@Override

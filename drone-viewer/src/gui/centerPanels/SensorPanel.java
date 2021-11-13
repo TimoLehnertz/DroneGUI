@@ -16,6 +16,7 @@ import gui.elements.FCNumberSetter;
 import gui.elements.FCSetter;
 import gui.elements.FCVec3Setter;
 import gui.elements.SectionPanel;
+import popups.Sensor3DFrame;
 import serial.FCCommand;
 import serial.SerialInterface;
 
@@ -67,7 +68,7 @@ public class SensorPanel extends CenterPanel {
 	JButton batCalibBtn = new JButton("Calibrate");
 	
 	FCVec3Setter accOffset;
-	FCVec3Setter accMul;
+//	FCVec3Setter accMul;
 //	FCMat3Setter accMul;
 //	FCQuaternionSetter accAngleOffset;
 	FCVec3Setter gyroOffset;
@@ -106,7 +107,7 @@ public class SensorPanel extends CenterPanel {
 		
 		accOffset = new FCVec3Setter(FCCommand.FC_GET_ACC_OFFSET, FCCommand.FC_SET_ACC_OFFSET, "Offset");
 //		accMul = new FCMat3Setter(FCCommand.FC_GET_ACC_MUL, FCCommand.FC_SET_ACC_MUL, "Multiplicator");
-		accMul = new FCVec3Setter(FCCommand.FC_GET_ACC_SCALE, FCCommand.FC_SET_ACC_SCALE, "Multiplicator");
+//		accMul = new FCVec3Setter(FCCommand.FC_GET_ACC_SCALE, FCCommand.FC_SET_ACC_SCALE, "Multiplicator");
 //		accAngleOffset = new FCQuaternionSetter(FCCommand.FC_GET_ACC_ANGLE_OFFSET, FCCommand.FC_SET_ACC_ANGLE_OFFSET, "Quaternion Angle offset");
 		JPanel calibAccPanel = new JPanel();
 		calibAccPanel.add(calibrateAccBtn);
@@ -119,20 +120,16 @@ public class SensorPanel extends CenterPanel {
 		calibrateAccBtnAdvanced.addActionListener((e) -> serial.sendDo(FCCommand.FC_DO_ACC_CALIB));
 		
 		gyroOffset = new FCVec3Setter(FCCommand.FC_GET_GYRO_OFFSET, FCCommand.FC_SET_GYRO_OFFSET, "Offset");
-//		gyroMul = new FCVec3Setter(FCCommand.FC_GET_GYRO_MUL, FCCommand.FC_SET_GYRO_MUL, "Multiplicator");
 		JPanel calibGyroPanel = new JPanel();
 		calibGyroPanel.add(calibrateGyroBtn);
 		calibrateGyroBtn.addActionListener((e) -> {serial.sendDo(FCCommand.FC_DO_GYRO_CALIB); refreshGyroOffset();});
 		calibGyroPanel.add(new JLabel("<html>The drone has to experience<br>no vibrations or<br>changes in rotation one<br>second before calibration</html>"));
 		
 		magHardIron = new FCVec3Setter(FCCommand.FC_GET_MAG_OFFSET, FCCommand.FC_SET_MAG_OFFSET, "Hard iron offset");
-//		magSoftIron = new FCMat3Setter(FCCommand.FC_GET_MAG_SOFT_IRON, FCCommand.FC_SET_MAG_SOFT_IRON, "Soft Iron scale factor");
 		magSoftIron = new FCVec3Setter(FCCommand.FC_GET_MAG_SCALE, FCCommand.FC_SET_MAG_SCALE, "Soft Iron scale factor");
 		JPanel calibMagPanel = new JPanel();
 		calibMagPanel.add(calibrateMagBtn);
-//		calibrateMagBtn.addActionListener((e) -> logic.popup(new MagCalibFrame(), true));
-		calibrateMagBtn.addActionListener((e) -> serial.sendDo(FCCommand.FC_DO_MAG_CALIB));
-//		calibMagPanel.add(new JLabel("<html>Open magnetometer calibration</html>"));
+		calibrateMagBtn.addActionListener((e) -> {serial.sendDo(FCCommand.FC_DO_MAG_CALIB); logic.popup(new Sensor3DFrame("MAG", true), false);});
 		
 		/**
 		 * Bat
@@ -173,8 +170,8 @@ public class SensorPanel extends CenterPanel {
 		
 		acc.getBody().add(accOffset, gbc);
 		gbc.gridx = 1;
-		acc.getBody().add(accMul, gbc);
-		gbc.gridx = 2;
+//		acc.getBody().add(accMul, gbc);
+//		gbc.gridx = 2;
 //		acc.getBody().add(accAngleOffset, gbc);
 		gbc.gridx = 0;
 		gbc.gridy = 1;

@@ -32,11 +32,20 @@ public class PIDPanel extends CenterPanel {
 	FCPidSetter levelPIDp = new FCPidSetter(FCCommand.FC_GET_LEVEL_PID_P, FCCommand.FC_SET_LEVEL_PID_P, "Pitch", false);
 	FCPidSetter levelPIDy = new FCPidSetter(FCCommand.FC_GET_LEVEL_PID_Y, FCCommand.FC_SET_LEVEL_PID_Y, "Yaw", false);
 	
+	FCNumberSetter angleModeMaxAngle = new FCNumberSetter(FCCommand.FC_GET_ANGLE_MODE_MAX_ANGLE, FCCommand.FC_SET_ANGLE_MODE_MAX_ANGLE, "Max Angle");
+	
 	// Altitude
 	FCPidSetter altitudePID = new FCPidSetter(FCCommand.FC_GET_ALTITUDE_PID, FCCommand.FC_SET_ALTITUDE_PID, "Altitude", true);
 	
+	FCNumberSetter hoverThrottle		= new FCNumberSetter(FCCommand.FC_GET_HOVER_THROTTLE, FCCommand.FC_SET_HOVER_THROTTLE, "Hover throttle");
+	FCNumberSetter launchIBoostSeconds 	= new FCNumberSetter(FCCommand.FC_GET_LAUNCH_I_BOOST_SECONDS, FCCommand.FC_SET_LAUNCH_I_BOOST_SECONDS, "Launch Boost seconds");
+	FCNumberSetter launchIBoostLevel 	= new FCNumberSetter(FCCommand.FC_GET_LAUNCH_I_BOOST_LEVEL, FCCommand.FC_SET_LAUNCH_I_BOOST_LEVEL, "Launch boost level");
+	FCNumberSetter launchIBoostAltitude = new FCNumberSetter(FCCommand.FC_GET_LAUNCH_I_BOOST_ALTITUDE, FCCommand.FC_SET_LAUNCH_I_BOOST_ALTITUDE, "Launch boost altitude");
+	
 	// Velocity
 	FCPidSetter velPID = new FCPidSetter(FCCommand.FC_GET_VEL_PID, FCCommand.FC_SET_VEL_PID, "Velocity X/Y", true);
+	FCNumberSetter gpsMaxSpeedHorizontal = new FCNumberSetter(FCCommand.FC_GET_GPS_MAX_SPEED_HORIZONTAL, FCCommand.FC_SET_GPS_MAX_SPEED_HORIZONTAL, "Max Speed Horizontal");
+	FCNumberSetter gpsMaxSpeedVertical = new FCNumberSetter(FCCommand.FC_GET_GPS_MAX_SPEED_VERTICAL, FCCommand.FC_SET_GPS_MAX_SPEED_VERTICAL, "Max Speed Vertical");
 	
 	
 	public PIDPanel() {
@@ -70,29 +79,59 @@ public class PIDPanel extends CenterPanel {
 		gbc.gridy = 1;
 		rateSection.getBody().add(additionalRatePanel, gbc);
 		
-		
 		/**
 		 * Level
 		 */
+		levelSection.getBody().setLayout(new GridBagLayout());
 		JPanel levelPidPanel = new JPanel(new GridLayout(1, 3));
 		levelPidPanel.add(levelPIDr);
 		levelPidPanel.add(levelPIDp);
 		levelPidPanel.add(levelPIDy);
-		levelSection.getBody().add(levelPidPanel);
+		
+		JPanel additionalLevelPanel = new JPanel();
+		additionalLevelPanel.add(angleModeMaxAngle);
+		
+		gbc.gridy = 0;
+		levelSection.getBody().add(levelPidPanel, gbc);
+		gbc.gridy = 1;
+		levelSection.getBody().add(additionalLevelPanel, gbc);
 		
 		/**
 		 * Altitude
 		 */
+		altitudeSection.getBody().setLayout(new GridBagLayout());
 		JPanel altitudePidPanel = new JPanel(new GridLayout(1, 1));
 		altitudePidPanel.add(altitudePID);
-		altitudeSection.getBody().add(altitudePidPanel);
+		
+		JPanel additionalAltitudePanel = new JPanel(new GridLayout(2, 2));
+		additionalAltitudePanel.add(hoverThrottle);
+		additionalAltitudePanel.add(launchIBoostSeconds);
+		additionalAltitudePanel.add(launchIBoostLevel);
+		additionalAltitudePanel.add(launchIBoostAltitude);
+		
+		gbc.gridy = 0;
+		gbc.gridx = 0;
+		altitudeSection.getBody().add(altitudePidPanel, gbc);
+		gbc.gridx = 1;
+		altitudeSection.getBody().add(additionalAltitudePanel, gbc);
 		
 		/**
 		 * Velocity
 		 */
+		velocitySection.getBody().setLayout(new GridBagLayout());
 		JPanel velocityPidPanel = new JPanel(new GridLayout(1, 1));
 		velocityPidPanel.add(velPID);
-		velocitySection.getBody().add(velocityPidPanel);
+		
+		JPanel additionalVelPanel = new JPanel(new GridLayout(2, 1));
+		additionalVelPanel.add(gpsMaxSpeedHorizontal);
+		additionalVelPanel.add(gpsMaxSpeedVertical);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		velocitySection.getBody().add(velocityPidPanel, gbc);
+		gbc.gridx = 1;
+		velocitySection.getBody().add(additionalVelPanel, gbc);
+		
 		
 		getBody().setLayout(new GridBagLayout());
 		gbc.gridy = 0;

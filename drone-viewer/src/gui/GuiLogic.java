@@ -14,10 +14,10 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.Timer;
 
 import gui.layout.PropertiesPanel;
 import imu.IMU;
+import popups.Popup;
 import serial.PortInfo;
 import serial.Serial;
 import serial.SerialInterface;
@@ -73,48 +73,56 @@ public class GuiLogic {
 	    return icon;
 	}
 	
-	public void popup(JFrame popup, boolean locking) {
+	public void popup(Popup popup, boolean locking) {
 		popup(popup, locking, null);
 	}
 	
-	public void popup(JFrame popup, boolean locking, IntConsumer onclose) {
+//	private boolean popupOpen = false;
+	
+	public void popup(Popup popup, boolean locking, IntConsumer onclose) {
+//		if(popupOpen) return;
+//		popupOpen = true;
 		popup.setVisible(true);
 		popup.setLocationRelativeTo(frame);
 		popup.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		if(locking) {			
+		if(locking) {
 			frame.setEnabled(false);
-			popup.addWindowListener(new WindowListener() {
-				@Override
-				public void windowOpened(WindowEvent e) {
-				}
-				
-				@Override
-				public void windowIconified(WindowEvent e) {
-				}
-				
-				@Override
-				public void windowDeiconified(WindowEvent e) {
-				}
-				
-				@Override
-				public void windowDeactivated(WindowEvent e) {
-				}
-				
-				@Override
-				public void windowClosing(WindowEvent e) {
+		}
+		popup.addWindowListener(new WindowListener() {
+			@Override
+			public void windowOpened(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if(locking) {
 					frame.setEnabled(true);
 				}
-				
-				@Override
-				public void windowClosed(WindowEvent e) {
-					if(onclose != null) onclose.accept(1);
-				}
-				
-				@Override
-				public void windowActivated(WindowEvent e) {
-				}
-			});
-		}
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+				if(onclose != null) onclose.accept(1);
+				popup.close();
+//				popupOpen = false;
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+			}
+		});
 	}
 
 	public IMU getImu() {

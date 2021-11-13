@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import gui.GuiLogic;
 import gui.elements.ImageButton;
 import maths.Vec3;
+import popups.Sensor3DFrame;
 import serial.SensorListener;
 
 public class GraphViewer extends JPanel implements SensorListener {
@@ -28,6 +29,7 @@ public class GraphViewer extends JPanel implements SensorListener {
 	private List<Plotter> plotters = new ArrayList<>();
 	private JPanel plotterPanel = new JPanel();
 	private JButton addButton = new JButton("Add");
+	private JButton open3dBtn = new JButton("3D View");
 	
 	public GraphViewer() {
 		super();
@@ -51,12 +53,17 @@ public class GraphViewer extends JPanel implements SensorListener {
 				addPlotter(getPlotterOfType((String) combo.getSelectedItem()));
 			}
 		});
+		open3dBtn.addActionListener(e -> {
+//			System.out.println(3);
+			logic.popup(new Sensor3DFrame(), false);
+		});
 		/**
 		 * gui
 		 */
 		header.add(headerLabel);
 		header.add(combo);
 		header.add(addButton);
+		header.add(open3dBtn);
 	}
 	
 	private void addPlotter(Plotter p) {

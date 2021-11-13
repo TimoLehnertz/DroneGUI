@@ -18,6 +18,7 @@ import gui.centerPanels.FCPanel;
 import gui.centerPanels.InsPanel;
 import gui.centerPanels.MotorPanel;
 import gui.centerPanels.PIDPanel;
+import gui.centerPanels.RatesPanel;
 import gui.centerPanels.SensorPanel;
 
 public class Explorer extends JPanel {
@@ -46,6 +47,7 @@ public class Explorer extends JPanel {
 		entries.put(new JButton("PIDs"), new PIDPanel());
 		entries.put(new JButton("FC"), new FCPanel());
 		entries.put(new JButton("Extras"), new ExtrasPanel());
+		entries.put(new JButton("Rates"), new RatesPanel());
 		logic.loadCenter(sensorPanel);
 		Timer t = new Timer(100, e -> {
 			
