@@ -3,17 +3,16 @@ package gui.elements;
 import java.awt.Color;
 import java.awt.GridLayout;
 
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-
 import serial.FCCommand;
+import xGui.XCheckBox;
+import xGui.XPanel;
 
 public class FCBooleanSetter extends FCSetter<Boolean> {
 
 private static final long serialVersionUID = 1L;
 	
-	private JPanel rightPanel = new JPanel();
-	private JCheckBox checkbox = new JCheckBox();
+	private XPanel rightPanel = new XPanel();
+	private XCheckBox checkbox = new XCheckBox();
 
 	public FCBooleanSetter(FCCommand getter, FCCommand setter, String label) {
 		super(getter, setter);

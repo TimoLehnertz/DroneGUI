@@ -1,5 +1,6 @@
-package gui.layout;
+package gui.elements;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
@@ -17,5 +18,6 @@ public class Viewer extends JPanel {
 		setLayout(new GridLayout(2, 1));
 		add(view3D);
 		add(graph);
+		setBackground(Color.DARK_GRAY);
 	}
 }

@@ -2,17 +2,18 @@ package gui.elements;
 
 import java.awt.GridLayout;
 
-import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.Timer;
 
 import serial.FCCommand;
+import xGui.XLabel;
+import xGui.XSlider;
 
 public class FCLiveSlider extends FCSetter<Double> {
 
 	private static final long serialVersionUID = 1L;
-	JSlider slider;
-	JLabel valueLabel;
+	XSlider slider;
+	XLabel valueLabel;
 	
 	long lastUpdate = System.currentTimeMillis();
 	
@@ -21,13 +22,13 @@ public class FCLiveSlider extends FCSetter<Double> {
 	
 	public FCLiveSlider(FCCommand getter, FCCommand setter, String label, int min, int max, int value) {
 		super(getter, setter);
-		slider = new JSlider(JSlider.HORIZONTAL, min, max, value);
-		valueLabel = new JLabel("" + value);
+		slider = new XSlider(JSlider.HORIZONTAL, min, max, value);
+		valueLabel = new XLabel("" + value);
 		slider.addChangeListener(e -> update());
 		fcFieldEnable(false);
 		
 		setLayout(new GridLayout(1, 3));
-		add(new JLabel(label));
+		add(new XLabel(label));
 		add(slider);
 		add(valueLabel);
 		

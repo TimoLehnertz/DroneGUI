@@ -4,8 +4,6 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 import javax.swing.JFormattedTextField;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.Timer;
@@ -13,8 +11,10 @@ import javax.swing.Timer;
 import gui.GuiLogic;
 import serial.FCCommand;
 import serial.SerialInterface;
+import xGui.XPanel;
+import xGui.XSpinner;
 
-public abstract class FCSetter<T> extends JPanel {
+public abstract class FCSetter<T> extends XPanel {
 
 	public static final long serialVersionUID = 1L;
 
@@ -146,19 +146,20 @@ public abstract class FCSetter<T> extends JPanel {
 	 * 
 	 * @return
 	 */
-	public static JSpinner getSpinner() {
+	public static XSpinner getSpinner() {
 		return getSpinner(false);
 	}
 
-	public static JSpinner getSpinner(boolean integer) {
+	public static XSpinner getSpinner(boolean integer) {
 		float step = integer ? 1 : 0.00001f;
 		SpinnerModel model = new SpinnerNumberModel(0, -10000000, 10000000, step);
-		JSpinner spinner = new JSpinner(model);
+		XSpinner spinner = new XSpinner(model);
 		if (!integer) {
-			spinner.setEditor(new JSpinner.NumberEditor(spinner, "0.00000"));
+			spinner.setEditor(new XSpinner.NumberEditor(spinner, "0.00000"));
 		}
-		JFormattedTextField jftf = ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField();
+		JFormattedTextField jftf = ((XSpinner.DefaultEditor) spinner.getEditor()).getTextField();
 		jftf.setColumns(5);
+		spinner.updateTheme();
 		return spinner;
 	}
 

@@ -1,66 +1,67 @@
 package gui.centerPanels;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.Timer;
 
-import gui.Cons;
+import xGui.XPanel;
+import xGui.XScrollPane;
+import xThemes.XStyle;
+import xThemes.XStyle.BackgroundType;
 
-public class CenterPanel extends JPanel {
+public class CenterPanel extends XPanel implements ComponentListener {
 	
 	private static final long serialVersionUID = 1L;
 
-	protected JPanel body = new JPanel();
+	protected XPanel body = new XPanel(new XStyle(BackgroundType.none));
+	XScrollPane scroll;
 	
-	public CenterPanel(String name) {
+	public CenterPanel() {
 		super();
 		
-		setLayout(new BorderLayout(2, 2));
-
-		JPanel top = new JPanel();
-		JLabel nameLabel = new JLabel(name);
-		nameLabel.setFont(Cons.FONT_H2);
-		top.add(nameLabel);
-		setBackground(Color.black);
-		body.setBackground(Color.DARK_GRAY);
-		
-//		body = new JPanel();
-		
-		/**
-		 * Scroll bar
-		 */
-		
-		JScrollPane scroll = new JScrollPane(body);
-		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		setPreferredSize(new Dimension(500, 700));
+		scroll = new XScrollPane(body);
+		scroll.setHorizontalScrollBarPolicy(XScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.setVerticalScrollBarPolicy(XScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scroll.getVerticalScrollBar().setUnitIncrement(16);
 
-		
-//		body.add(scroll);
-		
-		add(top, BorderLayout.NORTH);
-		add(scroll, BorderLayout.CENTER);
+		add(scroll);
+		addComponentListener(this);
+//		Timer t = new Timer(300, e -> {
+////			scroll.setPreferredSize(new Dimension(getWidth(), getHeight()));
+//			revalidate();
+//			repaint();
+//		});
+//		t.start();
 	}
 	
-	public JPanel getBody() {
+	public XPanel getBody() {
 		return body;
-	}
-	
-	@Override
-	public Component add(Component comp) {
-		return body.add(comp);
 	}
 	
 	@Override
 	public void remove(Component comp) {
 		body.remove(comp);
+	}
+
+	@Override
+	public void componentResized(ComponentEvent e) {
+		scroll.setPreferredSize(new Dimension(getWidth(), getHeight()));
+		revalidate();
+		repaint();
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent e) {
+	}
+
+	@Override
+	public void componentShown(ComponentEvent e) {
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent e) {
 	}
 }

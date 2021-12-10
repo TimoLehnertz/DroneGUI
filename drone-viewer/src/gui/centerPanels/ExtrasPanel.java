@@ -15,10 +15,11 @@ public class ExtrasPanel extends CenterPanel {
 	private FCBooleanSetter useLeds = new FCBooleanSetter(FCCommand.FC_GET_USE_LEDS, FCCommand.FC_SET_USE_LEDS, "Use LEDs");
 	
 	public ExtrasPanel() {
-		super("Extras");
+		super();
 		getBody().setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 100;
 		getBody().add(ledPanel, gbc);
 		
 		ledPanel.getBody().add(useLeds);

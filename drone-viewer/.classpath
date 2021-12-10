@@ -7,9 +7,11 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/simpleServer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/imu"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/3dtry10ish"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/serial"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/maths"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GuiX"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

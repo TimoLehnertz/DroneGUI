@@ -5,16 +5,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
 
 import gui.GuiLogic;
 import gui.elements.FCSetter;
@@ -27,8 +22,13 @@ import renderer.Canvas3D;
 import scene.Scene;
 import serial.SensorListener;
 import serial.SerialInterface;
+import xGui.XButton;
+import xGui.XLabel;
+import xGui.XPanel;
+import xGui.XSpinner;
+import xThemes.XStyle;
 
-public class Sensor3DFrame extends Popup implements SensorListener {
+public class Sensor3DPanel extends XPanel implements SensorListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -41,30 +41,24 @@ public class Sensor3DFrame extends Popup implements SensorListener {
 	
 	private List<String> xyzSensors = new ArrayList<>();
 	
-	private JSpinner spinner = FCSetter.getSpinner();
+	private XSpinner spinner = FCSetter.getSpinner();
 	
-	private JButton clearBtn = new JButton("Clear");
+	private XButton clearBtn = new XButton("Clear");
 	private JComboBox<String> sensorSelect = new JComboBox<>();
 	
-	private JPanel header = new JPanel();
-	private JPanel body = new JPanel();
+	private XPanel header = new XPanel(XStyle.BACKGROUND);
+	private XPanel body = new XPanel(XStyle.LAYER1);
 	
 	private String sensor = "";
 	private Vec3 vec = new Vec3();
 	private Vec3 lastVec = new Vec3();
 	
-	private JButton startStopRecBtn = new JButton("Start plotting");
+	private XButton startStopRecBtn = new XButton("Start plotting");
 	
 	private boolean plot = false;
 	
-	public Sensor3DFrame() {
-		this("", false);
-	}
-	
-	public Sensor3DFrame(String sensor, boolean plot) {
-		super("3D Sensor viewer");
-		this.sensor = sensor;
-		this.plot = plot;
+	public Sensor3DPanel() {
+		super();
 		if(plot) {
 			startStopRecBtn.setText("Stop plotting");
 		}
@@ -74,18 +68,14 @@ public class Sensor3DFrame extends Popup implements SensorListener {
 		
 		header.add(sensorSelect);
 		header.add(clearBtn);
-		header.add(new JLabel("Scale"));
+		header.add(new XLabel("Scale"));
 		header.add(spinner);
 		header.add(startStopRecBtn);
 		spinner.setValue(1);
 		
 		clearBtn.addActionListener(e -> clear());
 		sensorSelect.addActionListener(e -> updateSensor());
-		sensorSelect.addItem(sensor);
-		sensorSelect.addItem("-");
-		if(sensor.length() > 0) {
-			xyzSensors.add(sensor);
-		}
+//		sensorSelect.addItem("");
 		
 		startStopRecBtn.addActionListener(e -> {
 			if(startStopRecBtn.getText().contentEquals("Start plotting")) {
@@ -112,6 +102,8 @@ public class Sensor3DFrame extends Popup implements SensorListener {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				canvas.setPreferredSize(new Dimension(getWidth(), getHeight() - 50));
+				canvas.revalidate();
+				canvas.repaint();
 			}
 			
 			@Override
@@ -129,6 +121,7 @@ public class Sensor3DFrame extends Popup implements SensorListener {
 	void initCanvas() {
 		canvas.setPreferredSize(new Dimension(1200, 750));
 		canvas.getScenes().get(0).setUseMist(false);
+		
 		canvas.start();
 		CenterArrows centerArrows = new CenterArrows();
 		canvas.addObject(centerArrows);
@@ -197,11 +190,5 @@ public class Sensor3DFrame extends Popup implements SensorListener {
 				plot(vec);
 			}
 		}
-	}
-
-	@Override
-	public void close() {
-		serial.removeSensorListener(this);
-		canvas.stop();
 	}
 }

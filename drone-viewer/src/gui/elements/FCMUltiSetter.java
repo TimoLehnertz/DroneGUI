@@ -5,24 +5,23 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.IntConsumer;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.event.ChangeListener;
 
 import serial.FCCommand;
+import xGui.XButton;
+import xGui.XLabel;
+import xGui.XPanel;
+import xGui.XSpinner;
 
 public class FCMUltiSetter extends FCSetter<Double[]> {
 
 	private static final long serialVersionUID = 1L;
 
-	private List<JSpinner> spinners = new ArrayList<>();
+	private List<XSpinner> spinners = new ArrayList<>();
 	private List<String> labels = new ArrayList<>();
-	private JButton saveBtn = new JButton("Save");
-	private JButton resetBtn = new JButton("Reset");
+	private XButton saveBtn = new XButton("Save");
+	private XButton resetBtn = new XButton("Reset");
 	
 	private List<ChangeListener> changeListeners = new ArrayList<>();
 	
@@ -34,8 +33,8 @@ public class FCMUltiSetter extends FCSetter<Double[]> {
 		super(getter, setter);
 		this.labels = labels;
 		setLayout(new BorderLayout());
-		add(new JLabel(label), BorderLayout.NORTH);
-		if(useLabels) {			
+		add(new XLabel(label), BorderLayout.NORTH);
+		if(useLabels) {
 			initLabels();
 		}
 		initCenter();
@@ -49,19 +48,19 @@ public class FCMUltiSetter extends FCSetter<Double[]> {
 	
 	private void initLabels() {
 		if(labels == null) return;
-		JPanel left = new JPanel(new GridLayout(labels.size(), 1));
+		XPanel left = new XPanel(new GridLayout(labels.size(), 1));
 		for (String label : labels) {
-			left.add(new JLabel(label));
+			left.add(new XLabel(label));
 		}
 		add(left, BorderLayout.WEST);
 	}
 	
 	private void initCenter() {
-		JPanel center = new JPanel(new GridLayout(labels.size(), 1));
+		XPanel center = new XPanel(new GridLayout(labels.size(), 1));
 		for (int i = 0; i < labels.size(); i++) {
-			JSpinner spinner = getSpinner();
+			XSpinner spinner = getSpinner();
 			if(i % 2 == 0) {
-				JSpinner.NumberEditor jsEditor = (JSpinner.NumberEditor) spinner.getEditor(); jsEditor.getTextField().setBackground(Color.LIGHT_GRAY);
+//				XSpinner.NumberEditor jsEditor = (XSpinner.NumberEditor) spinner.getEditor(); jsEditor.getTextField().setBackground(Color.LIGHT_GRAY);
 			}
 			spinner.addChangeListener(e -> {
 				for (ChangeListener changeListener : changeListeners) {
@@ -75,7 +74,7 @@ public class FCMUltiSetter extends FCSetter<Double[]> {
 	}
 	
 	private void initFooter() {
-		JPanel footer = new JPanel();
+		XPanel footer = new XPanel();
 		add(footer, BorderLayout.SOUTH);
 		footer.add(saveBtn);
 		footer.add(resetBtn);
@@ -93,7 +92,7 @@ public class FCMUltiSetter extends FCSetter<Double[]> {
 
 	@Override
 	public void fcFieldEnable(boolean enabled) {
-		for (JSpinner spinner : spinners) {
+		for (XSpinner spinner : spinners) {
 			spinner.setEnabled(enabled);
 		}
 		saveBtn.setEnabled(enabled);

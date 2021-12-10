@@ -7,27 +7,26 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-
 import serial.FCCommand;
+import xGui.XButton;
+import xGui.XLabel;
+import xGui.XPanel;
+import xGui.XSpinner;
 
 public class FCMat3Setter extends FCSetter<Double[]> {
 
 	private static final long serialVersionUID = 1L;
 	
-	private List<JSpinner> spinners = new ArrayList<>();
-	private JPanel spinnerPanel = new JPanel();
-	private JPanel rightPanel = new JPanel();
-	private JButton saveBtn = new JButton("Save");
-	private JButton resetBtn = new JButton("Reset");
-	private JLabel label;
+	private List<XSpinner> spinners = new ArrayList<>();
+	private XPanel spinnerPanel = new XPanel();
+	private XPanel rightPanel = new XPanel();
+	private XButton saveBtn = new XButton("Save");
+	private XButton resetBtn = new XButton("Reset");
+	private XLabel label;
 
 	public FCMat3Setter(FCCommand getter, FCCommand setter, String label) {
 		super(getter, setter);
-		this.label = new JLabel(label);
+		this.label = new XLabel(label);
 		setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		
@@ -52,7 +51,7 @@ public class FCMat3Setter extends FCSetter<Double[]> {
 
 	private void initSpinners() {
 		for (int i = 0; i < 9; i++) {
-			JSpinner spinner = getSpinner();
+			XSpinner spinner = getSpinner();
 			spinners.add(spinner);
 			spinnerPanel.add(spinner);
 		}
@@ -70,7 +69,7 @@ public class FCMat3Setter extends FCSetter<Double[]> {
 
 	@Override
 	public void fcFieldEnable(boolean enabled) {
-		for (JSpinner jSpinner : spinners) {
+		for (XSpinner jSpinner : spinners) {
 			jSpinner.setEnabled(enabled);
 		}
 		saveBtn.setEnabled(enabled);

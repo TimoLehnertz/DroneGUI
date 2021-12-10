@@ -7,25 +7,24 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-
 import serial.FCCommand;
+import xGui.XButton;
+import xGui.XLabel;
+import xGui.XPanel;
+import xGui.XSpinner;
 
 public class FCNumberSetter extends FCSetter<Double> {
 
 	private static final long serialVersionUID = 1L;
 	
-	private List<JSpinner> spinners = new ArrayList<>();
+	private List<XSpinner> spinners = new ArrayList<>();
 	
-	private JLabel label;
-	private JButton saveBtn = new JButton("Save");
-	private JButton resetBtn = new JButton("Reset");
+	private XLabel label;
+	private XButton saveBtn = new XButton("Save");
+	private XButton resetBtn = new XButton("Reset");
 	
-	private JPanel rightPanel = new JPanel();
-	private JPanel content = new JPanel();
+	private XPanel rightPanel = new XPanel();
+	private XPanel content = new XPanel();
 	
 	private boolean integer;
 	
@@ -35,7 +34,7 @@ public class FCNumberSetter extends FCSetter<Double> {
 
 	public FCNumberSetter(FCCommand getter, FCCommand setter, String label, boolean integer) {
 		super(getter, setter);
-		this.label = new JLabel(label);
+		this.label = new XLabel(label);
 		this.integer = integer;
 		
 		saveBtn.addActionListener(e -> save());
@@ -65,10 +64,10 @@ public class FCNumberSetter extends FCSetter<Double> {
 	}
 	
 	private void addSpinnerPanel(String label) {
-		JPanel panel = new JPanel();
+		XPanel panel = new XPanel();
 		panel.setLayout(new GridBagLayout());
 
-		JSpinner spinner = getSpinner(integer);
+		XSpinner spinner = getSpinner(integer);
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;

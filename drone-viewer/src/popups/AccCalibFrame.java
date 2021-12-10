@@ -6,7 +6,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -49,7 +48,7 @@ public class AccCalibFrame extends JFrame implements SensorListener {
 	Vec3 vecBuff = new Vec3();
 	Vec3 vecBuffF = new Vec3();
 	JFileChooser fileChooser = new JFileChooser(System.getProperty("user.home") + "\\Desktop");
-	private String sensor = "ACC";
+//	private String sensor = "ACC";
 	JCheckBox filteredCheck = new JCheckBox("Use filtered");
 	private Canvas3D canvas = new Canvas3D(false);
 	private Scene scene = canvas.getActiveScene();

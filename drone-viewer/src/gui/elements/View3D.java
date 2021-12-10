@@ -1,15 +1,10 @@
-package gui.layout;
+package gui.elements;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import gui.GuiLogic;
-import gui.elements.FCBooleanSetter;
 import imu.IMU;
 import maths.Quaternion;
 import maths.Vec3;
@@ -18,8 +13,12 @@ import renderer.Canvas3D;
 import serial.FCCommand;
 import serial.SensorListener;
 import serial.SerialInterface;
+import xGui.XButton;
+import xGui.XCheckBox;
+import xGui.XLabel;
+import xGui.XPanel;
 
-public class View3D extends JPanel implements SensorListener{
+public class View3D extends XPanel implements SensorListener{
 
 	private static final long serialVersionUID = 1L;
 	private Canvas3D canvas;
@@ -29,30 +28,35 @@ public class View3D extends JPanel implements SensorListener{
 	Quaternion rot = new Quaternion();
 	Vec3 loc = new Vec3();
 	
-	JButton resetGuiBtn = new JButton("GUI");
-	JButton resetINSBtn = new JButton("INS");
+	XButton resetGuiBtn = new XButton("GUI");
+	XButton resetINSBtn = new XButton("INS");
 	
-	JCheckBox xCheck = new JCheckBox("X", true);
-	JCheckBox yCheck = new JCheckBox("Y", true);
-	JCheckBox zCheck = new JCheckBox("Z", true);
+	XCheckBox xCheck = new XCheckBox("X", true);
+	XCheckBox yCheck = new XCheckBox("Y", true);
+	XCheckBox zCheck = new XCheckBox("Z", true);
 	
 	FCBooleanSetter quatTelem = new FCBooleanSetter(FCCommand.FC_GET_USE_QUAT_TELEM, FCCommand.FC_SET_QUAT_TELEM, "Rot");
 	FCBooleanSetter locTelem = new FCBooleanSetter(FCCommand.FC_GET_USE_LOC_TELEM, FCCommand.FC_SET_LOC_TELEM, "Loc");
 	
 	public View3D() {
 		super();
-		JPanel header = new JPanel();
+		XPanel header = new XPanel();
+		header.setBackground(Color.DARK_GRAY);
 		setLayout(new BorderLayout());
 		logic.getSerialInterface().addSensorListener(this);
 		canvas = new Canvas3D(true);
 		canvas.setPreferredSize(new Dimension(430, 380));
-		header.add(new JLabel("Reset:"));
+		XLabel a = new XLabel("Reset:");
+		a.setForeground(Color.white);
+		header.add(a);
 		header.add(resetGuiBtn);
 		resetGuiBtn.addActionListener(e -> loc.setFrom(new Vec3()));
 		resetINSBtn.addActionListener(e -> serial.sendDo(FCCommand.FC_DO_RESET_INS));
 		header.add(resetINSBtn);
 		
-		header.add(new JLabel("Use:"));
+		XLabel b = new XLabel("Use: ");
+		b.setForeground(Color.white);
+		header.add(b);
 		header.add(xCheck);
 		header.add(yCheck);
 		header.add(zCheck);
@@ -69,7 +73,7 @@ public class View3D extends JPanel implements SensorListener{
 
 	@Override
 	public void sensorReceived(String sensorName, String sensorSubType, double value) {
-		if(sensorName.contentEquals("QUAT")) {
+		if(sensorName.contentEquals("Q")) {
 			if(sensorSubType.contentEquals("W")) {
 				rot.setW(value);
 			}

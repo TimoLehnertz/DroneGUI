@@ -2,23 +2,22 @@ package gui.elements;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
 import maths.Vec3;
 import serial.FCCommand;
+import xGui.XButton;
+import xGui.XLabel;
+import xGui.XPanel;
+import xGui.XSpinner;
 
 public class FCVec3Setter extends FCSetter<Vec3> {
 
@@ -26,14 +25,14 @@ public class FCVec3Setter extends FCSetter<Vec3> {
 	
 	private double step;
 	
-	private List<JSpinner> spinners = new ArrayList<>();
+	private List<XSpinner> spinners = new ArrayList<>();
 	
-	private JLabel label;
-	private JButton saveBtn = new JButton("Save");
-	private JButton resetBtn = new JButton("Reset");
+	private XLabel label;
+	private XButton saveBtn = new XButton("Save");
+	private XButton resetBtn = new XButton("Reset");
 	
-	private JPanel rightPanel = new JPanel();
-	protected JPanel content = new JPanel();
+	private XPanel rightPanel = new XPanel();
+	protected XPanel content = new XPanel();
 	
 	public FCVec3Setter(FCCommand getter, FCCommand setter, String label) {
 		this(getter, setter, label, 0.0001f);
@@ -41,7 +40,7 @@ public class FCVec3Setter extends FCSetter<Vec3> {
 
 	public FCVec3Setter(FCCommand getter, FCCommand setter, String label, double step) {
 		super(getter, setter);
-		this.label = new JLabel(label);
+		this.label = new XLabel(label);
 		this.step = step;
 		
 		saveBtn.addActionListener(e -> save());
@@ -74,20 +73,21 @@ public class FCVec3Setter extends FCSetter<Vec3> {
 	}
 	
 	private void addSpinnerPanel(String label) {
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		XPanel panel = new XPanel(new GridBagLayout());
 //		panel.setLayout(new GridBagLayout());
 		
 		SpinnerModel model = new SpinnerNumberModel(0, -10000000, 10000000, step);
-		JSpinner spinner = new JSpinner(model);
-		spinner.setEditor(new JSpinner.NumberEditor(spinner, "0.0000"));
+		XSpinner spinner = new XSpinner(model);
+		spinner.setEditor(new XSpinner.NumberEditor(spinner, "0.0000"));
 		Component mySpinnerEditor = spinner.getEditor();
-		JFormattedTextField jftf = ((JSpinner.DefaultEditor) mySpinnerEditor).getTextField();
+		JFormattedTextField jftf = ((XSpinner.DefaultEditor) mySpinnerEditor).getTextField();
 		jftf.setColumns(5);
+		spinner.updateTheme();
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		panel.add(new JLabel(label), gbc);
+		panel.add(new XLabel(label, XLabel.RIGHT), gbc);
 		gbc.gridx = 1;
 		panel.add(spinner, gbc);
 		
@@ -115,7 +115,7 @@ public class FCVec3Setter extends FCSetter<Vec3> {
 		if(spinners == null) spinners = new ArrayList<>();
 		saveBtn.setEnabled(enabled);
 		resetBtn.setEnabled(enabled);
-		for (JSpinner spinner : spinners) {
+		for (XSpinner spinner : spinners) {
 			spinner.setEnabled(enabled);
 		}
 	}

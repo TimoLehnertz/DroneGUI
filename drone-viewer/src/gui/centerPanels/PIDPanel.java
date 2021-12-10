@@ -4,13 +4,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
-import javax.swing.JPanel;
-
 import gui.elements.FCBooleanSetter;
 import gui.elements.FCNumberSetter;
 import gui.elements.FCPidSetter;
 import gui.elements.SectionPanel;
 import serial.FCCommand;
+import xGui.XPanel;
 
 public class PIDPanel extends CenterPanel {
 
@@ -49,7 +48,7 @@ public class PIDPanel extends CenterPanel {
 	
 	
 	public PIDPanel() {
-		super("PIDs");
+		super();
 		
 		SectionPanel rateSection = new SectionPanel("Rate PIDs");
 		SectionPanel levelSection = new SectionPanel("Level PIDs");
@@ -58,13 +57,14 @@ public class PIDPanel extends CenterPanel {
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 100;
 		
 		/**
 		 * Rate
 		 */
 		rateSection.getBody().setLayout(new GridBagLayout());
-		JPanel ratePidPanel = new JPanel(new GridLayout(1, 3));
-		JPanel additionalRatePanel = new JPanel();
+		XPanel ratePidPanel = new XPanel(new GridLayout(1, 3));
+		XPanel additionalRatePanel = new XPanel();
 		ratePidPanel.add(ratePIDr);
 		ratePidPanel.add(ratePIDp);
 		ratePidPanel.add(ratePIDy);
@@ -83,12 +83,12 @@ public class PIDPanel extends CenterPanel {
 		 * Level
 		 */
 		levelSection.getBody().setLayout(new GridBagLayout());
-		JPanel levelPidPanel = new JPanel(new GridLayout(1, 3));
+		XPanel levelPidPanel = new XPanel(new GridLayout(1, 3));
 		levelPidPanel.add(levelPIDr);
 		levelPidPanel.add(levelPIDp);
 		levelPidPanel.add(levelPIDy);
 		
-		JPanel additionalLevelPanel = new JPanel();
+		XPanel additionalLevelPanel = new XPanel();
 		additionalLevelPanel.add(angleModeMaxAngle);
 		
 		gbc.gridy = 0;
@@ -100,10 +100,10 @@ public class PIDPanel extends CenterPanel {
 		 * Altitude
 		 */
 		altitudeSection.getBody().setLayout(new GridBagLayout());
-		JPanel altitudePidPanel = new JPanel(new GridLayout(1, 1));
+		XPanel altitudePidPanel = new XPanel(new GridLayout(1, 1));
 		altitudePidPanel.add(altitudePID);
 		
-		JPanel additionalAltitudePanel = new JPanel(new GridLayout(2, 2));
+		XPanel additionalAltitudePanel = new XPanel(new GridLayout(2, 2));
 		additionalAltitudePanel.add(hoverThrottle);
 		additionalAltitudePanel.add(launchIBoostSeconds);
 		additionalAltitudePanel.add(launchIBoostLevel);
@@ -119,10 +119,10 @@ public class PIDPanel extends CenterPanel {
 		 * Velocity
 		 */
 		velocitySection.getBody().setLayout(new GridBagLayout());
-		JPanel velocityPidPanel = new JPanel(new GridLayout(1, 1));
+		XPanel velocityPidPanel = new XPanel(new GridLayout(1, 1));
 		velocityPidPanel.add(velPID);
 		
-		JPanel additionalVelPanel = new JPanel(new GridLayout(2, 1));
+		XPanel additionalVelPanel = new XPanel(new GridLayout(2, 1));
 		additionalVelPanel.add(gpsMaxSpeedHorizontal);
 		additionalVelPanel.add(gpsMaxSpeedVertical);
 		

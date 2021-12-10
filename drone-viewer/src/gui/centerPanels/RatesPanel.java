@@ -1,8 +1,10 @@
 package gui.centerPanels;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -10,18 +12,16 @@ import java.awt.Point;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.JPanel;
-import javax.swing.Timer;
-
 import gui.elements.FCMUltiSetter;
 import gui.elements.SectionPanel;
 import serial.FCCommand;
+import xGui.XPanel;
 
 public class RatesPanel extends CenterPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private SectionPanel rateSection = new SectionPanel("Rates");
+	private SectionPanel rateSection = new SectionPanel("rates");
 	
 	private List<FCMUltiSetter> setters = Arrays.asList(
 			new FCMUltiSetter(FCCommand.FC_GET_ROLL_RATES, FCCommand.FC_SET_ROLL_RATES, "Roll", Arrays.asList("RC", "Super", "RC expo"), true),
@@ -30,11 +30,12 @@ public class RatesPanel extends CenterPanel {
 	
 	private List<Color> colors = Arrays.asList(Color.red, new Color(10,170,10), Color.blue);
 	
-	JPanel plotterPanel = new JPanel() {
+	XPanel plotterPanel = new XPanel() {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected void paintComponent(Graphics g) {
+		protected void paintComponent(Graphics g2) {
+			Graphics2D g = (Graphics2D) g2;
 			super.paintComponent(g);
 			int i = 0;
 			double yLines = 10;
@@ -45,6 +46,7 @@ public class RatesPanel extends CenterPanel {
 			}
 			for (FCMUltiSetter r : setters) {
 				g.setColor(colors.get(i));
+				g.setStroke(new BasicStroke(5));
 				Point a = new Point();
 				Double[] rates = r.getVal();
 				for (int x = 0; x < getWidth(); x++) {
@@ -71,15 +73,16 @@ public class RatesPanel extends CenterPanel {
     }
 	
 	public RatesPanel() {
-		super("Rates");
-		
+		super();
+		getBody().setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 100;
 		gbc.gridy = 0;
 		
 		plotterPanel.setPreferredSize(new Dimension(700, 700));
 
-		JPanel setterPanel = new JPanel(new GridLayout(1, 3));
+		XPanel setterPanel = new XPanel(new GridLayout(1, 3));
 		int i = 0;
 		for (FCMUltiSetter setter : setters) {
 			setter.setBackground(colors.get(i));

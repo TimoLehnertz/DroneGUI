@@ -1,31 +1,26 @@
 package gui.elements;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import xGui.XLabel;
+import xGui.XPanel;
+import xThemes.XStyle;
 
-import gui.Cons;
-
-public class SectionPanel extends JPanel {
+public class SectionPanel extends XPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	JLabel nameLabel;
-	JPanel head;
-	JPanel body;
+	XLabel nameLabel;
+	XPanel head;
+	XPanel body;
 	
 	public SectionPanel(String name) {
-		super();
-		head = new JPanel();
-		body = new JPanel();
-		nameLabel = new JLabel(name);
+		super(XStyle.BACKGROUND);
+		head = new XPanel(XStyle.LAYER2);
+		body = new XPanel(XStyle.LAYER1);
+		nameLabel = new XLabel(name);
 		nameLabel.setAlignmentX(CENTER_ALIGNMENT);
-		nameLabel.setFont(Cons.FONT_H3);
-
-		head.setBackground(Color.gray);
 		
 		setLayout(new BorderLayout(2, 2));
 		
@@ -34,11 +29,9 @@ public class SectionPanel extends JPanel {
 		
 		add(head, BorderLayout.NORTH);
 		add(body, BorderLayout.CENTER);
-		
-		setBackground(Color.DARK_GRAY);
 	}
 	
-	public JPanel getBody() {
+	public XPanel getBody() {
 		return body;
 	}
 	

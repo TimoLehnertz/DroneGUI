@@ -8,17 +8,16 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
 import maths.Quaternion;
-import maths.Vec3;
 import serial.FCCommand;
+import xGui.XButton;
+import xGui.XLabel;
+import xGui.XPanel;
+import xGui.XSpinner;
 
 public class FCQuaternionSetter extends FCSetter<Quaternion> {
 
@@ -28,19 +27,19 @@ private double step;
 	
 	protected static String[] VEC3_LABELS = {"w", "x", "y", "z"};
 	
-	private List<JSpinner> spinners = new ArrayList<>();
+	private List<XSpinner> spinners = new ArrayList<>();
 	
-	private JLabel label;
-	private JButton saveBtn = new JButton("Save");
-	private JButton resetBtn = new JButton("Reset");
+	private XLabel label;
+	private XButton saveBtn = new XButton("Save");
+	private XButton resetBtn = new XButton("Reset");
 	
-	private JPanel rightPanel = new JPanel();
-	protected JPanel content = new JPanel();
+	private XPanel rightPanel = new XPanel();
+	protected XPanel content = new XPanel();
 	
 	public FCQuaternionSetter(FCCommand getter, FCCommand setter, String label) {
 		super(getter, setter);
-		this.label = new JLabel(label);
-		this.step = step;
+		this.label = new XLabel(label);
+//		this.step = step;
 		
 		saveBtn.addActionListener(e -> save());
 		resetBtn.addActionListener(e -> reset());
@@ -72,20 +71,20 @@ private double step;
 	}
 	
 	private void addSpinnerPanel(String label) {
-		JPanel panel = new JPanel();
+		XPanel panel = new XPanel();
 		panel.setLayout(new GridBagLayout());
 		
 		SpinnerModel model = new SpinnerNumberModel(0, -10000000, 10000000, step);
-		JSpinner spinner = new JSpinner(model);
-		spinner.setEditor(new JSpinner.NumberEditor(spinner, "0.0000"));
+		XSpinner spinner = new XSpinner(model);
+		spinner.setEditor(new XSpinner.NumberEditor(spinner, "0.0000"));
 		Component mySpinnerEditor = spinner.getEditor();
-		JFormattedTextField jftf = ((JSpinner.DefaultEditor) mySpinnerEditor).getTextField();
+		JFormattedTextField jftf = ((XSpinner.DefaultEditor) mySpinnerEditor).getTextField();
 		jftf.setColumns(5);
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		panel.add(new JLabel(label), gbc);
+		panel.add(new XLabel(label), gbc);
 		gbc.gridx = 1;
 		panel.add(spinner, gbc);
 		
@@ -108,7 +107,7 @@ private double step;
 		if(spinners == null) spinners = new ArrayList<>();
 		saveBtn.setEnabled(enabled);
 		resetBtn.setEnabled(enabled);
-		for (JSpinner spinner : spinners) {
+		for (XSpinner spinner : spinners) {
 			spinner.setEnabled(enabled);
 		}
 	}

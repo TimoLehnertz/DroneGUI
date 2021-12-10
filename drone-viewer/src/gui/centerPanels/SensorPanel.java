@@ -1,13 +1,10 @@
 package gui.centerPanels;
 
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.Timer;
 
 import gui.GuiLogic;
@@ -16,9 +13,12 @@ import gui.elements.FCNumberSetter;
 import gui.elements.FCSetter;
 import gui.elements.FCVec3Setter;
 import gui.elements.SectionPanel;
-import popups.Sensor3DFrame;
 import serial.FCCommand;
 import serial.SerialInterface;
+import xGui.XButton;
+import xGui.XLabel;
+import xGui.XPanel;
+import xGui.XSpinner;
 
 public class SensorPanel extends CenterPanel {
 
@@ -50,36 +50,32 @@ public class SensorPanel extends CenterPanel {
 	FCBooleanSetter rcTelem	   	= new FCBooleanSetter(FCCommand.FC_GET_USE_RC_TELEM, FCCommand.FC_SET_USE_RC_TELEM, "RC chanels");
 	FCBooleanSetter fcTelem	   	= new FCBooleanSetter(FCCommand.FC_GET_USE_FC_TELEM, FCCommand.FC_SET_USE_FC_TELEM, "FC");
 	FCBooleanSetter batTelem   	= new FCBooleanSetter(FCCommand.FC_GET_USE_BAT_TELEM, FCCommand.FC_SET_BAT_TELEM, "Bat");
+	FCBooleanSetter ultrasonicTelem= new FCBooleanSetter(FCCommand.FC_GET_USE_ULTRASONIC_TELEM, FCCommand.FC_SET_USE_ULTRASONIC_TELEM, "Ultrasonic");
 	
 	FCNumberSetter batLpf   	= new FCNumberSetter(FCCommand.FC_GET_BAT_LPF, FCCommand.FC_SET_BAT_LPF, "Bat low pass Filter");
-	FCNumberSetter accSideCalib = new FCNumberSetter(FCCommand.FC_GET_0, FCCommand.FC_SET_ACC_CALIB_SIDE, "Side calibration", true);
 	FCBooleanSetter useBatCell 	= new FCBooleanSetter(FCCommand.FC_GET_USE_VCELL, FCCommand.FC_SET_USE_VCELL, "Report cell voltage");
-		
-	JButton calibrateAccBtn = new JButton("Quick calibration");
-//	JButton calibrateAccBtn = new JButton("Quick calibration");
-	JLabel accCalibLabel = new JLabel("Side calib: 0: Bottom, 1: left, 2: right, 3 front, 4: back, 5 top");
-	JButton calibrateAccBtnAdvanced = new JButton("Advanced calibration");
-//	JButton accAngleBtn = new JButton("Set acc angle offset");
-	JButton calibrateGyroBtn = new JButton("Calibrate");
-	JButton calibrateMagBtn = new JButton("Calibrate");
 	
-	JLabel batInfoLabel = new JLabel("Enter actual battery voltage and hit Calibrate");
-	JSpinner batCalibSpinner = FCSetter.getSpinner();
-	JButton batCalibBtn = new JButton("Calibrate");
+	FCNumberSetter magZOffset   = new FCNumberSetter(FCCommand.FC_GET_MAG_Z_OFFSET, FCCommand.FC_SET_MAG_Z_OFFSET, "Z offset(deg)");
+		
+	XButton calibrateAccBtn = new XButton("Calibrate");
+	XButton calibrateGyroOffsetBtn = new XButton("Calibrate Offset");
+	XButton calibrateGyroScaleBtn = new XButton("Calibrate Scale");
+	XButton calibrateMagBtn = new XButton("Calibrate");
+	
+	XLabel batInfoLabel = new XLabel("Enter actual battery voltage and hit Calibrate");
+	XSpinner batCalibSpinner = FCSetter.getSpinner();
+	XButton batCalibBtn = new XButton("Calibrate");
 	
 	FCVec3Setter accOffset;
-//	FCVec3Setter accMul;
-//	FCMat3Setter accMul;
-//	FCQuaternionSetter accAngleOffset;
 	FCVec3Setter gyroOffset;
+	FCVec3Setter gyroScale;
 	FCVec3Setter gyroMul;
 	FCVec3Setter magHardIron;
-//	FCMat3Setter magSoftIron;
 	FCVec3Setter magSoftIron;
 	
 	
 	public SensorPanel() {
-		super("Sensors");
+		super();
 		
 		serial.addOpenListeners(() -> setEnabled(true));
 		
@@ -88,6 +84,7 @@ public class SensorPanel extends CenterPanel {
 		getBody().setLayout(new GridBagLayout());
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 100;
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -97,39 +94,37 @@ public class SensorPanel extends CenterPanel {
 		gbc.gridy = 2;
 		getBody().add(mag, gbc);
 		gbc.gridy = 3;
-		getBody().add(baro, gbc);
-		gbc.gridy = 4;
-		getBody().add(gps, gbc);
+//		getBody().add(baro, gbc);
+//		gbc.gridy = 4;
+//		getBody().add(gps, gbc);
 		gbc.gridy = 5;
 		getBody().add(bat, gbc);
 		gbc.gridy = 6;
 		getBody().add(telemSection, gbc);
 		
 		accOffset = new FCVec3Setter(FCCommand.FC_GET_ACC_OFFSET, FCCommand.FC_SET_ACC_OFFSET, "Offset");
-//		accMul = new FCMat3Setter(FCCommand.FC_GET_ACC_MUL, FCCommand.FC_SET_ACC_MUL, "Multiplicator");
-//		accMul = new FCVec3Setter(FCCommand.FC_GET_ACC_SCALE, FCCommand.FC_SET_ACC_SCALE, "Multiplicator");
-//		accAngleOffset = new FCQuaternionSetter(FCCommand.FC_GET_ACC_ANGLE_OFFSET, FCCommand.FC_SET_ACC_ANGLE_OFFSET, "Quaternion Angle offset");
-		JPanel calibAccPanel = new JPanel();
+		XPanel calibAccPanel = new XPanel(new FlowLayout(FlowLayout.LEFT));
+		
+		calibAccPanel.add(accOffset);
 		calibAccPanel.add(calibrateAccBtn);
-		calibrateAccBtn.addActionListener((e) -> {serial.sendDo(FCCommand.FC_DO_ACC_CALIB_QUICK); });//refreshAccOffset();});
-		calibAccPanel.add(calibrateAccBtnAdvanced);
-//		calibAccPanel.add(accAngleBtn);
-		calibAccPanel.add(accSideCalib);
-//		accAngleBtn.addActionListener(e -> {serial.sendDo(FCCommand.FC_DO_SET_ACC_ANGLE_OFFSET); accAngleOffset.get(100);});
-//		calibrateAccBtnAdvanced.addActionListener((e) -> logic.popup(new AccCalibFrame(), true));
-		calibrateAccBtnAdvanced.addActionListener((e) -> serial.sendDo(FCCommand.FC_DO_ACC_CALIB));
+		calibrateAccBtn.addActionListener((e) -> {serial.sendDo(FCCommand.FC_DO_ACC_CALIB_QUICK); accOffset.get();});
 		
 		gyroOffset = new FCVec3Setter(FCCommand.FC_GET_GYRO_OFFSET, FCCommand.FC_SET_GYRO_OFFSET, "Offset");
-		JPanel calibGyroPanel = new JPanel();
-		calibGyroPanel.add(calibrateGyroBtn);
-		calibrateGyroBtn.addActionListener((e) -> {serial.sendDo(FCCommand.FC_DO_GYRO_CALIB); refreshGyroOffset();});
-		calibGyroPanel.add(new JLabel("<html>The drone has to experience<br>no vibrations or<br>changes in rotation one<br>second before calibration</html>"));
+		gyroScale = new FCVec3Setter(FCCommand.FC_GET_GYRO_SCALE, FCCommand.FC_SET_GYRO_SCALE, "Scale");
+		XPanel calibGyroPanel = new XPanel();
+		calibGyroPanel.add(calibrateGyroOffsetBtn);
+		calibrateGyroOffsetBtn.addActionListener((e) -> {serial.sendDo(FCCommand.FC_DO_GYRO_CALIB_OFFSET); refreshGyroOffset();});
+//		calibGyroPanel.add(new XLabel("<html>Let drone rest on<br>the ground for 2 seconds</html>"));
+		calibGyroPanel.add(calibrateGyroScaleBtn);
+		calibrateGyroScaleBtn.addActionListener((e) -> {serial.sendDo(FCCommand.FC_DO_GYRO_CALIB_SCALE); refreshGyroScale();});
 		
 		magHardIron = new FCVec3Setter(FCCommand.FC_GET_MAG_OFFSET, FCCommand.FC_SET_MAG_OFFSET, "Hard iron offset");
 		magSoftIron = new FCVec3Setter(FCCommand.FC_GET_MAG_SCALE, FCCommand.FC_SET_MAG_SCALE, "Soft Iron scale factor");
-		JPanel calibMagPanel = new JPanel();
+		XPanel calibMagPanel = new XPanel();
 		calibMagPanel.add(calibrateMagBtn);
-		calibrateMagBtn.addActionListener((e) -> {serial.sendDo(FCCommand.FC_DO_MAG_CALIB); logic.popup(new Sensor3DFrame("MAG", true), false);});
+		calibMagPanel.add(magZOffset);
+//		calibrateMagBtn.addActionListener((e) -> {serial.sendDo(FCCommand.FC_DO_MAG_CALIB); logic.popup(new Sensor3DFrame("MAG", true), false);});
+
 		
 		/**
 		 * Bat
@@ -170,26 +165,16 @@ public class SensorPanel extends CenterPanel {
 		
 		acc.getBody().add(accOffset, gbc);
 		gbc.gridx = 1;
-//		acc.getBody().add(accMul, gbc);
-//		gbc.gridx = 2;
-//		acc.getBody().add(accAngleOffset, gbc);
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.gridwidth = 2;
 		acc.getBody().add(calibAccPanel, gbc);
-		gbc.gridy = 2;
-		acc.getBody().add(accCalibLabel, gbc);
 		
 		gbc.gridwidth = 1;
+		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gyro.getBody().add(gyroOffset, gbc);
 		gbc.gridx = 1;
-//		gyro.getBody().add(gyroMul, gbc);
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.gridwidth = 2;
+		gyro.getBody().add(gyroScale, gbc);
+		gbc.gridx = 2;
 		gyro.getBody().add(calibGyroPanel, gbc);
-		gbc.gridwidth = 1;
 		
 		gbc.gridy = 0;
 		gbc.gridx = 0;
@@ -234,17 +219,13 @@ public class SensorPanel extends CenterPanel {
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		telemSection.getBody().add(batTelem);
+		gbc.gridx = 1;
+		gbc.gridy = 3;
+		telemSection.getBody().add(ultrasonicTelem);
+		
 		
 		setEnabled(false);
 	}
-	
-//	private void refreshAccOffset() {
-//		Timer t = new Timer(100, e -> {
-//			accOffset.refresh();
-//			((Timer) e.getSource()).stop();
-//		});
-//		t.start();
-//	}
 	
 	private void refreshGyroOffset() {
 		Timer t = new Timer(100, e -> {
@@ -254,13 +235,20 @@ public class SensorPanel extends CenterPanel {
 		t.start();
 	}
 	
+	private void refreshGyroScale() {
+		Timer t = new Timer(100, e -> {
+			gyroScale.refresh();
+			((Timer) e.getSource()).stop();
+		});
+		t.start();
+	}
+	
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
 		calibrateAccBtn.setEnabled(enabled);
-		calibrateAccBtnAdvanced.setEnabled(enabled);
-//		accAngleBtn.setEnabled(enabled);
-		calibrateGyroBtn.setEnabled(enabled);
+		calibrateGyroOffsetBtn.setEnabled(enabled);
+		calibrateGyroScaleBtn.setEnabled(enabled);
 		calibrateMagBtn.setEnabled(enabled);
 		batCalibBtn.setEnabled(enabled);
 		batCalibSpinner.setEnabled(enabled);

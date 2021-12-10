@@ -164,6 +164,17 @@ public class SerialInterface implements SerialReceiveListener {
 		}
 	}
 	
+	private void parseSensor(String line) {
+		String split[] = line.split(" ");
+		String command = split[0];
+		int valStart = command.length() + 1;
+		String val = line.substring(valStart);
+		FCCommand fcCommand = FCCommand.valueOf(command);
+		if(fcCommand == FCCommand.FC_S) {
+			processSensor(val);
+		}
+	}
+	
 	/**
 	 * POST COmmands
 	 * 	FC_POST_SENSOR
@@ -175,13 +186,7 @@ public class SerialInterface implements SerialReceiveListener {
 		if(split.length < 2 || !line.contains("FC_POST_")) {
 			return;
 		}
-		String command = split[0];
-		int valStart = command.length() + 1;
-		String val = line.substring(valStart);
-		FCCommand fcCommand = FCCommand.valueOf(command);
-		if(fcCommand == FCCommand.FC_POST_SENSOR) {
-			processSensor(val);
-		}
+		
 	}
 	
 	private void processSensor(String body) {
@@ -218,6 +223,10 @@ public class SerialInterface implements SerialReceiveListener {
 		if(line.startsWith("FC_POST_")) {
 			processPost(line);
 		}
+//		FC_S (Sensor)
+		if(line.startsWith("FC_S")) {
+			parseSensor(line);
+		}
 		for (LineListener listener : lineListeners) {
 			listener.lineReceived(line);
 		}
@@ -238,7 +247,7 @@ public class SerialInterface implements SerialReceiveListener {
 	}
 
 	public void calibrateGyro() {
-		send(FCCommand.FC_DO_GYRO_CALIB);
+		send(FCCommand.FC_DO_GYRO_CALIB_OFFSET);
 	}
 	
 	private void send(FCCommand command) {
