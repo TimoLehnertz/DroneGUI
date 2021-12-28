@@ -23,8 +23,8 @@ public class PIDPanel extends CenterPanel {
 	
 	FCBooleanSetter useAntiGravity = new FCBooleanSetter(FCCommand.FC_GET_USE_ANTI_GRAVITY, FCCommand.FC_SET_USE_ANTI_GRAVITY, "Use anti gravity");
 	FCNumberSetter antiGravityMul 	= new FCNumberSetter(FCCommand.FC_GET_ANTI_GRAVITY_MULTIPLICATOR, FCCommand.FC_SET_ANTI_GRAVITY_MULTIPLICATOR, "Anti gravity multiplicator");
-	FCNumberSetter antiGravitySpeed = new FCNumberSetter(FCCommand.FC_GET_ANTI_GRAVITY_SPEED, FCCommand.FC_SET_ANTI_GRAVITY_SPEED, "Anti gravity speed");
-	FCNumberSetter antiGravityLpf 	= new FCNumberSetter(FCCommand.FC_GET_ANTI_GRAVITY_LPF, FCCommand.FC_SET_ANTI_GRAVITY_LPF, "Anti gravity lpf");
+//	FCNumberSetter antiGravitySpeed = new FCNumberSetter(FCCommand.FC_GET_ANTI_GRAVITY_SPEED, FCCommand.FC_SET_ANTI_GRAVITY_SPEED, "Anti gravity speed");
+//	FCNumberSetter antiGravityLpf 	= new FCNumberSetter(FCCommand.FC_GET_ANTI_GRAVITY_LPF, FCCommand.FC_SET_ANTI_GRAVITY_LPF, "Anti gravity lpf");
 	
 	//Level
 	FCPidSetter levelPIDr = new FCPidSetter(FCCommand.FC_GET_LEVEL_PID_R, FCCommand.FC_SET_LEVEL_PID_R, "Roll", true);
@@ -72,8 +72,8 @@ public class PIDPanel extends CenterPanel {
 		additionalRatePanel.add(iRelax);
 		additionalRatePanel.add(useAntiGravity);
 		additionalRatePanel.add(antiGravityMul);
-		additionalRatePanel.add(antiGravitySpeed);
-		additionalRatePanel.add(antiGravityLpf);
+//		additionalRatePanel.add(antiGravitySpeed);
+//		additionalRatePanel.add(antiGravityLpf);
 		
 		rateSection.getBody().add(ratePidPanel, gbc);
 		gbc.gridy = 1;

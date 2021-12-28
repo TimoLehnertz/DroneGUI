@@ -74,6 +74,10 @@ public class SerialInterface implements SerialReceiveListener {
 		set(setter, value, (e) -> {});
 	}
 	
+	public void print(String msg) {
+		serial.print(msg);
+	}
+	
 	public void set(FCCommand setter, Object value, SetListener listener) {
 		String msg = value.toString();
 		SetterHelper s = new SetterHelper(msg, listener, uid);

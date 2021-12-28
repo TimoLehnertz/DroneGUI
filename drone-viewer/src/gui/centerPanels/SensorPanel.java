@@ -123,7 +123,7 @@ public class SensorPanel extends CenterPanel {
 		XPanel calibMagPanel = new XPanel();
 		calibMagPanel.add(calibrateMagBtn);
 		calibMagPanel.add(magZOffset);
-//		calibrateMagBtn.addActionListener((e) -> {serial.sendDo(FCCommand.FC_DO_MAG_CALIB); logic.popup(new Sensor3DFrame("MAG", true), false);});
+		calibrateMagBtn.addActionListener(e -> serial.sendDo(FCCommand.FC_DO_MAG_CALIB));
 
 		
 		/**

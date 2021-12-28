@@ -1,8 +1,12 @@
 package main;
 
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -38,9 +42,23 @@ public class DroneViewer extends XIdePreset {
 	JComboBox<String> selectCombo;
 	private Map<String, String> comboMap = new HashMap<>();
 	
+	File logFile = null;
+	
 	public DroneViewer() {
 		super("Drone viewer", "drone-logo.png", "Alpha 1.0");
 		refrechSerial();
+		serial.addLineListener(line -> {
+			if(logFile == null) return;
+			System.out.println(line);
+			try {
+				FileWriter myWriter = new FileWriter(logFile, true);
+			    myWriter.write(line);
+			    myWriter.write("\n");
+			    myWriter.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	@Override
@@ -89,6 +107,8 @@ public class DroneViewer extends XIdePreset {
 
 	@Override
 	public void initHeaderRightContent(XPanel panel) {
+		XButton record = new XButton("Rocord");
+		record.setToolTipText("Record incoming Serial data to File");
 		comboMap = new HashMap<>();
 		selectCombo = new JComboBox<>();
 		comboMap.put("Select", "");
@@ -97,8 +117,18 @@ public class DroneViewer extends XIdePreset {
 		panel.add(selectCombo);
 		panel.add(refreshButton);
 		panel.add(disconnectButton);
+		panel.add(record);
+		record.addActionListener(e -> {
+			if(logFile == null) {				
+				record.setText("Stop recording");
+				record();
+			} else {
+				logFile = null;
+				record.setText("Record");
+			}
+		});
 		selectCombo.addActionListener(e -> {
-			if(selectCombo.getSelectedIndex() > 0) {				
+			if(selectCombo.getSelectedIndex() > 0) {
 				GuiLogic.getInstance().getSerialInterface().selectComPort(comboMap.get((String) selectCombo.getSelectedItem()));
 			}
 		});
@@ -125,7 +155,33 @@ public class DroneViewer extends XIdePreset {
 		selectCombo.setSelectedIndex(0);
 	}
 	
+	private void record() {
+		int i = 0;
+		try {
+			while(true) {
+				logFile = new File("log" + i + ".txt");
+				if (logFile.createNewFile()) {
+					System.out.println("File created: " + logFile.getName());
+					break;
+				}
+				i++;
+			}
+		} catch (IOException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) {
 		new DroneViewer();
+//		double now = 0;
+//		double val = 1;
+//		double lpf = 0.005;
+//		int i = 0;
+//		while (val > 0.1) {
+//			val = val * (1-lpf) + now * lpf;
+//			i++;
+//		}
+//		System.out.println(i);
 	}
 }

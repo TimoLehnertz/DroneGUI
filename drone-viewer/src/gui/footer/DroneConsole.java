@@ -21,7 +21,14 @@ public class DroneConsole extends XPanel implements LineListener, PrintListener 
 
 	private static final long serialVersionUID = 1L;
 
-	private XConsole console = new XConsole();
+	private XConsole console = new XConsole() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void send(String msg) {
+			GuiLogic.getInstance().getSerialInterface().print(msg);
+		}
+	};
 	private XTriplePanel head = new XTriplePanel();
 	private XLabel label = new XLabel("Serial");
 	

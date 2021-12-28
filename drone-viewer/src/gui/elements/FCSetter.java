@@ -152,7 +152,7 @@ public abstract class FCSetter<T> extends XPanel {
 
 	public static XSpinner getSpinner(boolean integer) {
 		float step = integer ? 1 : 0.00001f;
-		SpinnerModel model = new SpinnerNumberModel(0, -10000000, 10000000, step);
+		SpinnerModel model = new SpinnerNumberModel(0, -1000000000000l, 1000000000000l, step);
 		XSpinner spinner = new XSpinner(model);
 		if (!integer) {
 			spinner.setEditor(new XSpinner.NumberEditor(spinner, "0.00000"));
