@@ -50,9 +50,11 @@ public class SensorPanel extends CenterPanel {
 	FCBooleanSetter rcTelem	   	= new FCBooleanSetter(FCCommand.FC_GET_USE_RC_TELEM, FCCommand.FC_SET_USE_RC_TELEM, "RC chanels");
 	FCBooleanSetter fcTelem	   	= new FCBooleanSetter(FCCommand.FC_GET_USE_FC_TELEM, FCCommand.FC_SET_USE_FC_TELEM, "FC");
 	FCBooleanSetter batTelem   	= new FCBooleanSetter(FCCommand.FC_GET_USE_BAT_TELEM, FCCommand.FC_SET_BAT_TELEM, "Bat");
-	FCBooleanSetter ultrasonicTelem= new FCBooleanSetter(FCCommand.FC_GET_USE_ULTRASONIC_TELEM, FCCommand.FC_SET_USE_ULTRASONIC_TELEM, "Ultrasonic");
+	FCBooleanSetter ultrasonicTelem = new FCBooleanSetter(FCCommand.FC_GET_USE_ULTRASONIC_TELEM, FCCommand.FC_SET_USE_ULTRASONIC_TELEM, "Ultrasonic");
 	
 	FCNumberSetter batLpf   	= new FCNumberSetter(FCCommand.FC_GET_BAT_LPF, FCCommand.FC_SET_BAT_LPF, "Bat low pass Filter");
+	FCNumberSetter batOffset   	= new FCNumberSetter(FCCommand.FC_GET_BAT_OFFSET, FCCommand.FC_SET_BAT_OFFSET, "Bat Offset");
+	FCNumberSetter batMul   	= new FCNumberSetter(FCCommand.FC_GET_BAT_MUL, FCCommand.FC_SET_BAT_MUL, "Multiplicator");
 	FCBooleanSetter useBatCell 	= new FCBooleanSetter(FCCommand.FC_GET_USE_VCELL, FCCommand.FC_SET_USE_VCELL, "Report cell voltage");
 	
 	FCNumberSetter magZOffset   = new FCNumberSetter(FCCommand.FC_GET_MAG_Z_OFFSET, FCCommand.FC_SET_MAG_Z_OFFSET, "Z offset(deg)");
@@ -62,9 +64,9 @@ public class SensorPanel extends CenterPanel {
 	XButton calibrateGyroScaleBtn = new XButton("Calibrate Scale");
 	XButton calibrateMagBtn = new XButton("Calibrate");
 	
-	XLabel batInfoLabel = new XLabel("Enter actual battery voltage and hit Calibrate");
-	XSpinner batCalibSpinner = FCSetter.getSpinner();
-	XButton batCalibBtn = new XButton("Calibrate");
+//	XLabel batInfoLabel = new XLabel("Enter actual battery voltage and hit Calibrate");
+//	XSpinner batCalibSpinner = FCSetter.getSpinner();
+//	XButton batCalibBtn = new XButton("Calibrate");
 	
 	FCVec3Setter accOffset;
 	FCVec3Setter gyroOffset;
@@ -133,27 +135,29 @@ public class SensorPanel extends CenterPanel {
 		gbc.gridx = 0;
 		
 		bat.getBody().setLayout(new GridBagLayout());
-		bat.getBody().add(batInfoLabel, gbc);
+//		bat.getBody().add(batInfoLabel, gbc);
 		gbc.gridx = 1;
-		bat.getBody().add(batCalibSpinner, gbc);
+		bat.getBody().add(batMul, gbc);
 		gbc.gridx = 2;
-		bat.getBody().add(batCalibBtn, gbc);
+//		bat.getBody().add(batCalibBtn, gbc);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		bat.getBody().add(batLpf, gbc);
+		gbc.gridy = 2;
+		bat.getBody().add(batOffset, gbc);
 		gbc.gridx = 1;
 		bat.getBody().add(useBatCell, gbc);
 		
-		batCalibSpinner.setValue(15);
-		batCalibBtn.addActionListener(e -> {
-			double voltage = (double) batCalibSpinner.getValue();
-			System.out.println(voltage);
-			serial.set(FCCommand.FC_SET_VOLTAGE_CALIB, voltage, s -> {
-				if(s) {
-					System.out.println("Succsessfully calibrated vBat");
-				}
-			});
-		});
+//		batCalibSpinner.setValue(15);
+//		batCalibBtn.addActionListener(e -> {
+//			double voltage = (double) batCalibSpinner.getValue();
+//			System.out.println(voltage);
+//			serial.set(FCCommand.FC_SET_VOLTAGE_CALIB, voltage, s -> {
+//				if(s) {
+//					System.out.println("Succsessfully calibrated vBat");
+//				}
+//			});
+//		});
 		
 		gbc.gridy = 0;
 		gbc.gridx = 0;
@@ -250,7 +254,7 @@ public class SensorPanel extends CenterPanel {
 		calibrateGyroOffsetBtn.setEnabled(enabled);
 		calibrateGyroScaleBtn.setEnabled(enabled);
 		calibrateMagBtn.setEnabled(enabled);
-		batCalibBtn.setEnabled(enabled);
-		batCalibSpinner.setEnabled(enabled);
+//		batCalibBtn.setEnabled(enabled);
+//		batCalibSpinner.setEnabled(enabled);
 	}
 }

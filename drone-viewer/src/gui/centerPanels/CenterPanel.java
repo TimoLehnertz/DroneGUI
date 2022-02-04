@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-import javax.swing.Timer;
-
 import xGui.XPanel;
 import xGui.XScrollPane;
 import xThemes.XStyle;

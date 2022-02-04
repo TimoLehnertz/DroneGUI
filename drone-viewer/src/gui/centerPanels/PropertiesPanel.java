@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JComponent;
-import javax.swing.Timer;
 
 import xGui.XButton;
 import xGui.XPanel;

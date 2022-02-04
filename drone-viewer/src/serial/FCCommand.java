@@ -126,6 +126,8 @@ public enum FCCommand {
 	FC_GET_OVERWRITE_FM,
 	
 	FC_GET_BAT_LPF,
+	FC_GET_BAT_OFFSET,
+	FC_GET_BAT_MUL,
 	
 	FC_GET_USE_VCELL,
 	
@@ -233,6 +235,8 @@ public enum FCCommand {
 	FC_SET_VOLTAGE_CALIB,
 	
 	FC_SET_BAT_LPF,
+	FC_SET_BAT_OFFSET,
+	FC_SET_BAT_MUL,
 	
 	FC_SET_USE_VCELL,
 	
